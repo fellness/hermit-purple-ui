@@ -1,30 +1,34 @@
 import React from 'react';
 import { Table } from 'antd';
-import { ColumnProps } from 'antd/es/table';
-import { Epoch } from '../types';
+import { ColumnProps, TableProps } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
+import { Epoch } from '../generated/types';
+import { EpochId } from './EpochId';
+import { Timestamp } from './Timestamp';
 
-interface BlocksProps {
-  epochs: Epoch[];
-}
+type RecentEpoch = Pick<Epoch, 'epochId' | 'timestamp' | 'transactionsCount'>;
 
-export function EpochList(props: BlocksProps) {
+export function EpochList(props: TableProps<RecentEpoch>) {
   const { t } = useTranslation();
 
-  const columns: ColumnProps<Epoch>[] = [
+  const columns: ColumnProps<RecentEpoch>[] = [
     {
-      title: t('Epoch height'),
-    },
-    {
-      title: t('Hash'),
+      title: t('Height'),
+      dataIndex: 'epochId',
+      render: (epochId: number) => <EpochId epochId={epochId} />,
     },
     {
       title: t('Timestamp'),
+      dataIndex: 'timestamp',
+      render: (timestamp: Date) => <Timestamp timestamp={timestamp} />,
     },
     {
       title: t('Transactions'),
+      dataIndex: 'transactionsCount',
     },
   ];
 
-  return <Table columns={columns} dataSource={props.epochs} />;
+  return (
+    <Table rowKey={x => x.epochId.toString()} columns={columns} {...props} />
+  );
 }

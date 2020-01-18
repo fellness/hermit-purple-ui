@@ -5,166 +5,375 @@ schema {
   mutation: Mutation
 }
 
-"Epoch is a single digital record created within a blockchain. Each epoch contains a record of the previous Epoch, and when linked together these become the âchainâ.An epoch is always composed of header and body."
 type Epoch {
-  "The header section of an epoch"
-  header: EpochHeader!
-  "The body section of an epoch"
-  orderedTxHashes: [Hash!]!
-}
-
-"An epoch header is like the metadata of an epoch."
-type EpochHeader {
-  "Identifier of a chain in order to prevent replay attacks across channels "
-  chainId: Hash!
-  "The merkle roots of all the confirms"
-  confirmRoot: [Hash!]!
-  "The sum of all transactions costs"
-  cyclesUsed: [Uint64!]!
-  "Known as the block height like other blockchain"
-  epochId: Uint64!
-  "The merkle root of ordered transactions"
-  orderRoot: Hash!
-  "The hash of the serialized previous epoch"
-  preHash: Hash!
+  epochId: Int!
+  orderedTransactionRoot: String!
+  preHash: String!
   proof: Proof!
-  "The address descirbed who packed the epoch"
-  proposer: Address!
-  "The merkle roots of receipts"
-  receiptRoot: [Hash!]!
-  "The merkle root of state root"
-  stateRoot: Hash!
-  "A timestamp that records when the epoch was created"
-  timestamp: Uint64!
-  "The version of validator is designed for cross chain"
-  validatorVersion: Uint64!
-  validators: [Validator!]!
-}
-
-type Event {
-  data: String!
-  service: String!
-}
-
-type ExecResp {
-  isError: Boolean!
-  ret: String!
+  stateRoot: String!
+  timestamp: DateTime!
+  transactions(
+    after: ID
+    before: ID
+    first: Int
+    last: Int
+    skip: Int
+  ): [Transaction!]!
+  transactionsCount: Int!
+  validatorVersion: String!
+  validators(
+    after: ID
+    before: ID
+    first: Int
+    last: Int
+    skip: Int
+  ): [Validator!]!
 }
 
 type Mutation {
-  "send transaction"
-  sendTransaction(
-    inputEncryption: InputTransactionEncryption!
-    inputRaw: InputRawTransaction!
-  ): Hash!
-  unsafeSendTransaction(
-    inputPrivkey: Bytes!
-    inputRaw: InputRawTransaction!
-  ): Hash!
-    @deprecated(
-      reason: "DON'T use it in production! This is just for development."
-    )
+  createOneEpoch(data: EpochCreateInput!): Epoch!
+  createOneTransaction(data: TransactionCreateInput!): Transaction!
+  createOneValidator(data: ValidatorCreateInput!): Validator!
 }
 
-"The verifier of the epoch header proved"
 type Proof {
-  bitmap: Bytes!
-  epochHash: Hash!
-  epochId: Uint64!
-  round: Uint64!
-  signature: Bytes!
+  bitmap: String!
+  epochHash: String!
+  round: Int!
+  signature: String!
 }
 
 type Query {
-  "Get the epoch"
-  getEpoch(epochId: Uint64): Epoch!
-  "Get the receipt by transaction hash"
-  getReceipt(txHash: Hash!): Receipt!
-  "Get the transaction by hash"
-  getTransaction(txHash: Hash!): SignedTransaction!
-  "query service"
-  queryService(
-    caller: Address!
-    cyclesLimit: Uint64
-    cyclesPrice: Uint64
-    epochId: Uint64
-    method: String!
-    payload: String!
-    serviceName: String!
-  ): ExecResp!
+  epoch(where: EpochWhereUniqueInput!): Epoch
+  epoches(
+    after: ID
+    before: ID
+    first: Int
+    last: Int
+    orderBy: EpochOrderByInput
+    skip: Int
+    where: EpochWhereInput
+  ): [Epoch!]!
+  transaction(where: TransactionWhereUniqueInput!): Transaction
+  transactions(
+    after: ID
+    before: ID
+    first: Int
+    last: Int
+    orderBy: TransactionOrderByInput
+    skip: Int
+    where: TransactionWhereInput
+  ): [Transaction!]!
+  validator(where: ValidatorWhereUniqueInput!): Validator
 }
 
-type Receipt {
-  cyclesUsed: Uint64!
-  epochId: Uint64!
-  events: [Event!]!
-  response: ReceiptResponse!
-  stateRoot: Hash!
-  txHash: Hash!
-}
-
-type ReceiptResponse {
-  isError: Boolean!
+type Transaction {
+  cyclesLimit: String!
+  cyclesPrice: String!
+  epoch: Epoch!
   method: String!
-  ret: String!
-  serviceName: String!
-}
-
-type SignedTransaction {
-  chainId: Hash!
-  cyclesLimit: Uint64!
-  cyclesPrice: Uint64!
-  method: String!
-  nonce: Hash!
+  nonce: String!
   payload: String!
-  pubkey: Bytes!
+  pubkey: String!
   serviceName: String!
-  signature: Bytes!
-  timeout: Uint64!
-  txHash: Hash!
+  signature: String!
+  txHash: String!
 }
 
-"Validator address set"
 type Validator {
-  address: Address!
+  address: String!
+  epoches(after: ID, before: ID, first: Int, last: Int, skip: Int): [Epoch!]!
   proposeWeight: Int!
   voteWeight: Int!
 }
 
-"There was many types of transaction in Muta, A transaction often require computing resources or write data to chain,these resources are valuable so we need to pay some token for them.InputRawTransaction describes information above"
-input InputRawTransaction {
-  "Identifier of the chain."
-  chainId: Hash!
-  "Mostly like the gas limit in Ethereum, describes the fee that you are willing to pay the highest price for the transaction"
-  cyclesLimit: Uint64!
-  cyclesPrice: Uint64!
+enum OrderByArg {
+  asc
+  desc
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: DateTime
+  notIn: [DateTime!]
+}
+
+input EpochCreateInput {
+  epochId: Int!
+  id: ID
+  orderRoot: String!
+  preHash: String!
+  proof: ProofCreateOneWithoutProofInput!
+  proposer: String!
+  stateRoot: String!
+  timestamp: DateTime!
+  transactions: TransactionCreateManyWithoutTransactionsInput
+  transactionsCount: Int!
+  validatorVersion: String!
+  validators: ValidatorCreateManyWithoutValidatorsInput
+}
+
+input EpochCreateManyWithoutEpochesInput {
+  connect: [EpochWhereUniqueInput!]
+  create: [EpochCreateWithoutValidatorsInput!]
+}
+
+input EpochCreateOneWithoutEpochInput {
+  connect: EpochWhereUniqueInput
+  create: EpochCreateWithoutTransactionsInput
+}
+
+input EpochCreateWithoutTransactionsInput {
+  epochId: Int!
+  id: ID
+  orderRoot: String!
+  preHash: String!
+  proof: ProofCreateOneWithoutProofInput!
+  proposer: String!
+  stateRoot: String!
+  timestamp: DateTime!
+  transactionsCount: Int!
+  validatorVersion: String!
+  validators: ValidatorCreateManyWithoutValidatorsInput
+}
+
+input EpochCreateWithoutValidatorsInput {
+  epochId: Int!
+  id: ID
+  orderRoot: String!
+  preHash: String!
+  proof: ProofCreateOneWithoutProofInput!
+  proposer: String!
+  stateRoot: String!
+  timestamp: DateTime!
+  transactions: TransactionCreateManyWithoutTransactionsInput
+  transactionsCount: Int!
+  validatorVersion: String!
+}
+
+input EpochFilter {
+  every: EpochWhereInput
+  none: EpochWhereInput
+  some: EpochWhereInput
+}
+
+input EpochOrderByInput {
+  epochId: OrderByArg
+  id: OrderByArg
+  orderRoot: OrderByArg
+  preHash: OrderByArg
+  proposer: OrderByArg
+  stateRoot: OrderByArg
+  timestamp: OrderByArg
+  transactionsCount: OrderByArg
+  validatorVersion: OrderByArg
+}
+
+input EpochWhereInput {
+  AND: [EpochWhereInput!]
+  NOT: [EpochWhereInput!]
+  OR: [EpochWhereInput!]
+  epochId: IntFilter
+  id: StringFilter
+  orderRoot: StringFilter
+  preHash: StringFilter
+  proof: ProofWhereInput
+  proposer: StringFilter
+  stateRoot: StringFilter
+  timestamp: DateTimeFilter
+  transactions: TransactionFilter
+  transactionsCount: IntFilter
+  validatorVersion: StringFilter
+  validators: ValidatorFilter
+}
+
+input EpochWhereUniqueInput {
+  epochId: Int
+  id: ID
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: Int
+  notIn: [Int!]
+}
+
+input ProofCreateOneWithoutProofInput {
+  connect: ProofWhereUniqueInput
+  create: ProofCreateWithoutEpochesInput
+}
+
+input ProofCreateWithoutEpochesInput {
+  bitmap: String!
+  epochHash: String!
+  epochId: Int!
+  id: ID
+  round: Int!
+  signature: String!
+}
+
+input ProofWhereInput {
+  AND: [ProofWhereInput!]
+  NOT: [ProofWhereInput!]
+  OR: [ProofWhereInput!]
+  bitmap: StringFilter
+  epochHash: StringFilter
+  epochId: IntFilter
+  epoches: EpochFilter
+  id: StringFilter
+  round: IntFilter
+  signature: StringFilter
+}
+
+input ProofWhereUniqueInput {
+  id: ID
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+input TransactionCreateInput {
+  chainId: String!
+  cyclesLimit: String!
+  cyclesPrice: String!
+  epoch: EpochCreateOneWithoutEpochInput!
+  id: ID
   method: String!
-  "Every transaction has its own id, unlike Ethereum's nonce,the nonce in Muta is an hash"
-  nonce: Hash!
+  nonce: String!
   payload: String!
+  pubkey: String!
   serviceName: String!
-  "For security and performance reasons, Muta will only deal with trade request over a period of time,the `timeout` should be `timeout > current_epoch_height` and `timeout < current_epoch_height + timeout_gap`,the `timeout_gap` generally equal to 20."
-  timeout: Uint64!
+  signature: String!
+  timeout: String!
+  txHash: String!
 }
 
-"Signature of the transaction"
-input InputTransactionEncryption {
-  "The public key of transfer"
-  pubkey: Bytes!
-  "The signature of the transaction"
-  signature: Bytes!
-  "The digest of the transaction"
-  txHash: Hash!
+input TransactionCreateManyWithoutTransactionsInput {
+  connect: [TransactionWhereUniqueInput!]
+  create: [TransactionCreateWithoutEpochInput!]
 }
 
-"Bytes corresponding hex string."
-scalar Bytes
+input TransactionCreateWithoutEpochInput {
+  chainId: String!
+  cyclesLimit: String!
+  cyclesPrice: String!
+  id: ID
+  method: String!
+  nonce: String!
+  payload: String!
+  pubkey: String!
+  serviceName: String!
+  signature: String!
+  timeout: String!
+  txHash: String!
+}
 
-"Uint64"
-scalar Uint64
+input TransactionFilter {
+  every: TransactionWhereInput
+  none: TransactionWhereInput
+  some: TransactionWhereInput
+}
 
-"20 bytes of account address"
-scalar Address
+input TransactionOrderByInput {
+  chainId: OrderByArg
+  cyclesLimit: OrderByArg
+  cyclesPrice: OrderByArg
+  id: OrderByArg
+  method: OrderByArg
+  nonce: OrderByArg
+  payload: OrderByArg
+  pubkey: OrderByArg
+  serviceName: OrderByArg
+  signature: OrderByArg
+  timeout: OrderByArg
+  txHash: OrderByArg
+}
 
-"The output digest of Keccak hash function"
-scalar Hash
+input TransactionWhereInput {
+  AND: [TransactionWhereInput!]
+  NOT: [TransactionWhereInput!]
+  OR: [TransactionWhereInput!]
+  chainId: StringFilter
+  cyclesLimit: StringFilter
+  cyclesPrice: StringFilter
+  epoch: EpochWhereInput
+  id: StringFilter
+  method: StringFilter
+  nonce: StringFilter
+  payload: StringFilter
+  pubkey: StringFilter
+  serviceName: StringFilter
+  signature: StringFilter
+  timeout: StringFilter
+  txHash: StringFilter
+}
+
+input TransactionWhereUniqueInput {
+  id: ID
+  txHash: String
+}
+
+input ValidatorCreateInput {
+  address: String!
+  epoches: EpochCreateManyWithoutEpochesInput
+  id: ID
+  proposeWeight: Int!
+  voteWeight: Int!
+}
+
+input ValidatorCreateManyWithoutValidatorsInput {
+  connect: [ValidatorWhereUniqueInput!]
+  create: [ValidatorCreateWithoutEpochesInput!]
+}
+
+input ValidatorCreateWithoutEpochesInput {
+  address: String!
+  id: ID
+  proposeWeight: Int!
+  voteWeight: Int!
+}
+
+input ValidatorFilter {
+  every: ValidatorWhereInput
+  none: ValidatorWhereInput
+  some: ValidatorWhereInput
+}
+
+input ValidatorWhereInput {
+  AND: [ValidatorWhereInput!]
+  NOT: [ValidatorWhereInput!]
+  OR: [ValidatorWhereInput!]
+  address: StringFilter
+  epoches: EpochFilter
+  id: StringFilter
+  proposeWeight: IntFilter
+  voteWeight: IntFilter
+}
+
+input ValidatorWhereUniqueInput {
+  address: String
+  id: ID
+}
+
+scalar DateTime

@@ -1,10 +1,7 @@
-schema: "http://127.0.0.1:8000/graphql"
-documents: "src/**/*.graphql"
 generates:
-  src/generated/graphql.tsx:
+  ./src/generated/types.ts:
+    documents: ./src/**/*.tsx
+    schema: http://localhost:4040
     plugins:
-      - "typescript"
-      - "typescript-operations"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"
+      - typescript
+      - typescript-operations

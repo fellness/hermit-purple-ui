@@ -1,61 +1,31 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Switch,
-  useLocation,
-} from 'react-router-dom';
-import { Layout, Menu } from 'antd';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Layout, Spin } from 'antd';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
 import { Home } from './Home';
 import { Epochs } from './Epochs';
 import { EpochDetail } from './EpochDetail';
 import { Transactions } from './Transactions';
+import { TransactionDetail } from './TransactionDetail';
+import { AppHeader } from './App/AppHeader';
+import { useClient } from '../hook/apollo-client';
+import { useStoreActions } from '../store';
+
+const Toolkit = lazy(() =>
+  import('./Toolkit').then(x => ({ default: x.Toolkit })),
+);
 
 const { Header, Content } = Layout;
-const MenuItem = Menu.Item;
-
-const Logo = styled(Link)`
-  float: left;
-  cursor: pointer;
-  line-height: 64px;
-  display: inline-block;
-  font-size: 18px;
-  padding-right: 24px;
-`;
-
-function AppHeader() {
-  const { t } = useTranslation();
-  const { pathname } = useLocation();
-
-  const [, type] = pathname.split('/');
-
-  return (
-    <>
-      <Logo to="/">Hermit</Logo>
-      <Menu
-        mode="horizontal"
-        theme="dark"
-        style={{ lineHeight: '64px' }}
-        selectedKeys={[type]}
-      >
-        <MenuItem key="epochs">
-          <Link to="/epochs">{t('Epochs')}</Link>
-        </MenuItem>
-        <MenuItem key="transactions">
-          <Link to="/transactions">{t('Transactions')}</Link>
-        </MenuItem>
-      </Menu>
-    </>
-  );
-}
 
 export function Main() {
-  const client = new ApolloClient({});
+  const [client] = useClient();
+  const initConfig = useStoreActions(
+    actions => actions.globalConfig.initConfig,
+  );
+
+  useEffect(() => {
+    initConfig();
+  }, [initConfig]);
 
   return (
     <ApolloProvider client={client}>
@@ -65,20 +35,28 @@ export function Main() {
             <AppHeader />
           </Header>
           <Content style={{ padding: '16px 50px' }}>
-            <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/epochs">
-                <Epochs />
-              </Route>
-              <Route path="/epochs/:id">
-                <EpochDetail />
-              </Route>
-              <Route path="/transactions">
-                <Transactions />
-              </Route>
-            </Switch>
+            <Suspense fallback={<Spin />}>
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route exact path="/epochs">
+                  <Epochs />
+                </Route>
+                <Route path="/epochs/:id">
+                  <EpochDetail />
+                </Route>
+                <Route exact path="/transactions">
+                  <Transactions />
+                </Route>
+                <Route exact path="/transactions/:id">
+                  <TransactionDetail />
+                </Route>
+                <Route path="/toolkit">
+                  <Toolkit />
+                </Route>
+              </Switch>
+            </Suspense>
           </Content>
         </Router>
       </Layout>

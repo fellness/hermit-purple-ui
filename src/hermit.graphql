@@ -1,7 +1,0 @@
-query epochHeight {
-  getEpoch {
-    header {
-      epochId
-    }
-  }
-}

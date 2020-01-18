@@ -1,8 +1,15 @@
 import { createStore, createTypedHooks } from 'easy-peasy';
+import { globalConfig, GlobalConfigModel } from './globalConfig';
 
-interface StoreModel {}
+interface StoreModel {
+  globalConfig: GlobalConfigModel;
+}
 
-export const store = createStore<StoreModel>({});
+const storeModel: StoreModel = {
+  globalConfig,
+};
+
+export const store = createStore<StoreModel>(storeModel);
 const typedHooks = createTypedHooks<StoreModel>();
 
 export const useStoreActions = typedHooks.useStoreActions;

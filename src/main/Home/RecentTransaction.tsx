@@ -1,0 +1,71 @@
+import React from 'react';
+import { Table } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { ColumnProps } from 'antd/es/table';
+import gql from 'graphql-tag';
+import { RecentTransactionsQuery } from '../../generated/types';
+import { useQuery } from '@apollo/react-hooks';
+import { hexToNum } from '../../utils';
+import { Link } from 'react-router-dom';
+import { $ElementType, ValuesType } from 'utility-types';
+import { EpochId } from '../../container/EpochId';
+
+const QUERY_RECENT_TRANSACTION = gql`
+  query recentTransactions {
+    transactions(orderBy: { id: desc }, first: 11) {
+      cyclesPrice
+      txHash
+      serviceName
+      method
+      epoch {
+        epochId
+      }
+    }
+  }
+`;
+
+type RecentTransaction = ValuesType<
+  $ElementType<RecentTransactionsQuery, 'transactions'>
+>;
+
+export function RecentTransaction() {
+  const { t } = useTranslation();
+
+  const { data, loading } = useQuery<RecentTransactionsQuery>(
+    QUERY_RECENT_TRANSACTION,
+    {
+      pollInterval: 3000,
+    },
+  );
+
+  const columns: ColumnProps<RecentTransaction>[] = [
+    {
+      title: t('Transaction Hash'),
+      dataIndex: 'txHash',
+      ellipsis: true,
+      render: hash => <Link to={`/transactions/${hash}`}>{hash}</Link>,
+    },
+    {
+      title: t('Epoch'),
+      dataIndex: 'epoch.epochId',
+      render: id => <EpochId epochId={id} />,
+    },
+    { title: t('Cycles Price'), dataIndex: 'cyclesPrice', render: hexToNum },
+    { title: t('Service'), dataIndex: 'serviceName' },
+    { title: t('Method'), dataIndex: 'method' },
+  ];
+
+  const dataSource = data?.transactions ?? [];
+
+  return (
+    <Table
+      size="small"
+      loading={loading}
+      columns={columns}
+      dataSource={dataSource}
+      title={() => t('Recent transactions')}
+      pagination={false}
+      rowKey={row => row.txHash}
+    />
+  );
+}
