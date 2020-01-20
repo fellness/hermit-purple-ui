@@ -16,6 +16,7 @@ export function GlobalSearch() {
   return (
     <div style={{ padding: '20px' }}>
       <Input.Search
+        size="large"
         placeholder="epoch / transaction"
         onSearch={handleOnSearch}
       />

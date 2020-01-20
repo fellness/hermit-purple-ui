@@ -27,12 +27,6 @@ export function Toolkit() {
               <span>{t('Service')}</span>
             </Link>
           </Menu.Item>
-          {/*<Menu.Item key="transaction">*/}
-          {/*  <Link to={`/toolkit/transaction`}>*/}
-          {/*    <Icon type="api" />*/}
-          {/*    <span>{t('Transaction')}</span>*/}
-          {/*  </Link>*/}
-          {/*</Menu.Item>*/}
         </Menu>
       </Sider>
       <Content style={{ padding: '0 24px', minHeight: 280 }}>

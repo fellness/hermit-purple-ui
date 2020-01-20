@@ -7,6 +7,7 @@ import { EpochQuery, EpochQueryVariables } from '../generated/types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Timestamp } from '../container/Timestamp';
+import { HexWrapper } from '../container/Hex';
 
 const DescriptionsWrapper = styled.div`
   .ant-descriptions-bordered .ant-descriptions-item-label {
@@ -67,10 +68,10 @@ export function EpochDetail() {
             {epoch.proof.round}
           </Descriptions.Item>
           <Descriptions.Item label={t('Validator Version')}>
-            {epoch.validatorVersion}
+            <HexWrapper mode="number" data={epoch.validatorVersion} />
           </Descriptions.Item>
           <Descriptions.Item label={t('State Root')}>
-            {epoch.stateRoot}
+            <HexWrapper data={epoch.stateRoot} />
           </Descriptions.Item>
         </Descriptions>
       </DescriptionsWrapper>

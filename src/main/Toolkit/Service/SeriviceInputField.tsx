@@ -7,7 +7,7 @@ interface ServiceInputFieldProps {
 }
 
 export function ServiceInputField(props: ServiceInputFieldProps) {
-  const [field, meta, helpers] = useField<Service>(props.name);
+  const [, meta, helpers] = useField<Service>(props.name);
 
   const { value } = meta;
   const { setValue } = helpers;

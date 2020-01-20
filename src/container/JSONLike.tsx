@@ -1,8 +1,9 @@
 import React from 'react';
 import JSONTree from 'react-json-tree';
 
-interface TransactionPayloadProps {
-  payload: string;
+interface JSONLikeProps {
+  data: string;
+  rootKey?: string;
 }
 
 const theme = {
@@ -31,12 +32,13 @@ const defaultExpandNodes: (
   level: number,
 ) => boolean = (key, data, level) => level < 2;
 
-export function TransactionPayload(props: TransactionPayloadProps) {
+export function JSONLike(props: JSONLikeProps) {
   let object: object;
+  const data = props.data;
   try {
-    object = { payload: JSON.parse(props.payload) };
+    object = { [props.rootKey || 'data']: JSON.parse(data) };
   } catch (e) {
-    object = JSON.parse(JSON.stringify(props.payload));
+    object = JSON.parse(JSON.stringify(data));
   }
 
   return (
