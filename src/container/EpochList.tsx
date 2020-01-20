@@ -5,10 +5,20 @@ import { useTranslation } from 'react-i18next';
 import { Epoch } from '../generated/types';
 import { EpochId } from './EpochId';
 import { Timestamp } from './Timestamp';
+import { SimplePage } from './SimplePage';
 
 type RecentEpoch = Pick<Epoch, 'epochId' | 'timestamp' | 'transactionsCount'>;
 
-export function EpochList(props: TableProps<RecentEpoch>) {
+type TurnPage = () => void;
+
+export function EpochList(
+  props: TableProps<RecentEpoch> & {
+    simplePage?: {
+      onPrevPage: TurnPage;
+      onNextPage: TurnPage;
+    };
+  },
+) {
   const { t } = useTranslation();
 
   const columns: ColumnProps<RecentEpoch>[] = [
@@ -29,6 +39,19 @@ export function EpochList(props: TableProps<RecentEpoch>) {
   ];
 
   return (
-    <Table rowKey={x => x.epochId.toString()} columns={columns} {...props} />
+    <>
+      <Table
+        rowKey={x => x.epochId.toString()}
+        pagination={false}
+        columns={columns}
+        {...props}
+      />
+      {props.simplePage && (
+        <SimplePage
+          onPrevPage={props.simplePage.onPrevPage}
+          onNextPage={props.simplePage.onNextPage}
+        />
+      )}
+    </>
   );
 }

@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { QueryParamProvider } from 'use-query-params';
 import { Home } from './Home';
 import { Epochs } from './Epochs';
 import { EpochDetail } from './EpochDetail';
@@ -35,28 +36,30 @@ export function Main() {
             <AppHeader />
           </Header>
           <Content style={{ padding: '16px 50px' }}>
-            <Suspense fallback={<Spin />}>
-              <Switch>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route exact path="/epochs">
-                  <Epochs />
-                </Route>
-                <Route path="/epochs/:id">
-                  <EpochDetail />
-                </Route>
-                <Route exact path="/transactions">
-                  <Transactions />
-                </Route>
-                <Route exact path="/transactions/:id">
-                  <TransactionDetail />
-                </Route>
-                <Route path="/toolkit">
-                  <Toolkit />
-                </Route>
-              </Switch>
-            </Suspense>
+            <QueryParamProvider ReactRouterRoute={Route}>
+              <Suspense fallback={<Spin />}>
+                <Switch>
+                  <Route exact path="/">
+                    <Home />
+                  </Route>
+                  <Route exact path="/epochs">
+                    <Epochs />
+                  </Route>
+                  <Route path="/epochs/:id">
+                    <EpochDetail />
+                  </Route>
+                  <Route exact path="/transactions">
+                    <Transactions />
+                  </Route>
+                  <Route exact path="/transactions/:id">
+                    <TransactionDetail />
+                  </Route>
+                  <Route path="/toolkit">
+                    <Toolkit />
+                  </Route>
+                </Switch>
+              </Suspense>
+            </QueryParamProvider>
           </Content>
         </Router>
       </Layout>
