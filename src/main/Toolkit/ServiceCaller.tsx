@@ -30,9 +30,11 @@ export function ServiceCaller() {
       method,
       payload: payloadType === PayloadType.JSON ? JSON.parse(payload) : payload,
     });
+
+    // Only for testing
     const signed = muta
       .accountFromPrivateKey(
-        '0x45c56be699dca666191ad3446897e0f480da234da896270202514a0e1a587c3f',
+        '0x1000000000000000000000000000000000000000000000000000000000000000',
       )
       .signTransaction(tx);
 

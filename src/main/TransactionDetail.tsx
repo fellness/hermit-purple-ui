@@ -1,5 +1,13 @@
 import React from 'react';
-import { Descriptions, Empty, Input, PageHeader, Spin } from 'antd';
+import {
+  Descriptions,
+  Divider,
+  Empty,
+  Input,
+  PageHeader,
+  Spin,
+  Tag,
+} from 'antd';
 import gql from 'graphql-tag';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
@@ -9,8 +17,10 @@ import {
   TransactionQuery,
   TransactionQueryVariables,
 } from '../generated/types';
-import { TransactionPayload } from '../container/TransactionPayload';
+import { JSONLike } from '../container/JSONLike';
 import { EpochId } from '../container/EpochId';
+import { $ElementType } from 'utility-types';
+import { HexWrapper } from '../container/Hex';
 
 const DescriptionsWrapper = styled.div`
   .ant-descriptions-bordered .ant-descriptions-item-label {
@@ -33,9 +43,47 @@ const QUERY_TRANSACTION = gql`
       nonce
       pubkey
       signature
+      receipt {
+        cyclesUsed
+        response {
+          isError
+          ret
+        }
+      }
     }
   }
 `;
+
+function ReceiptDescriptions(props: {
+  transaction: $ElementType<TransactionQuery, 'transaction'>;
+}) {
+  const { t } = useTranslation();
+
+  const receipt = props?.transaction?.receipt;
+  if (!receipt) return null;
+
+  return (
+    <DescriptionsWrapper>
+      <Descriptions bordered size="small" column={1} title={t('Receipt')}>
+        <Descriptions.Item label={t('Cycles Used')}>
+          <HexWrapper mode="number" data={receipt.cyclesUsed} />
+        </Descriptions.Item>
+
+        <Descriptions.Item label={t('Status')}>
+          {receipt.response.isError ? (
+            <Tag color="red">Error</Tag>
+          ) : (
+            <Tag color="green">Success</Tag>
+          )}
+        </Descriptions.Item>
+
+        <Descriptions.Item label={t('Response')}>
+          <JSONLike data={receipt.response.ret} />
+        </Descriptions.Item>
+      </Descriptions>
+    </DescriptionsWrapper>
+  );
+}
 
 export function TransactionDetail() {
   const { goBack } = useHistory();
@@ -60,10 +108,14 @@ export function TransactionDetail() {
       subTitle={transaction.txHash}
       onBack={goBack}
     >
+      <ReceiptDescriptions transaction={transaction} />
+
+      <Divider />
+
       <DescriptionsWrapper>
-        <Descriptions column={1} bordered>
+        <Descriptions size="small" column={1} bordered>
           <Descriptions.Item label={t('Hash')}>
-            {transaction.txHash}
+            <HexWrapper data={transaction.txHash} />
           </Descriptions.Item>
           <Descriptions.Item label={t('Epoch')}>
             <EpochId epochId={transaction.epoch.epochId} />
@@ -78,22 +130,22 @@ export function TransactionDetail() {
           </Descriptions.Item>
 
           <Descriptions.Item label={t('Payload')}>
-            <TransactionPayload payload={transaction.payload} />
+            <JSONLike data={transaction.payload} />
           </Descriptions.Item>
 
           <Descriptions.Item label={t('Nonce')}>
-            {transaction.nonce}
+            <HexWrapper data={transaction.nonce} />
           </Descriptions.Item>
 
           <Descriptions.Item label={t('Cycles Limit')}>
-            {transaction.cyclesLimit}
+            <HexWrapper mode="number" data={transaction.cyclesLimit} />
           </Descriptions.Item>
 
           <Descriptions.Item label={t('Cycles Price')}>
-            {transaction.cyclesPrice}
+            <HexWrapper mode="number" data={transaction.cyclesPrice} />
           </Descriptions.Item>
 
-          <Descriptions.Item label={t('Service')}>
+          <Descriptions.Item label={t('Signature')}>
             <Input.TextArea value={transaction.signature} />
           </Descriptions.Item>
         </Descriptions>
