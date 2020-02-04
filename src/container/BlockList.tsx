@@ -2,17 +2,17 @@ import React from 'react';
 import { Table } from 'antd';
 import { ColumnProps, TableProps } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
-import { Epoch } from '../generated/types';
-import { EpochId } from './EpochId';
+import { Block } from '../generated/types';
+import { BlockHeight } from './BlockHeight';
 import { Timestamp } from './Timestamp';
 import { SimplePage } from './SimplePage';
 
-type RecentEpoch = Pick<Epoch, 'epochId' | 'timestamp' | 'transactionsCount'>;
+type RecentBlock = Pick<Block, 'height' | 'timestamp' | 'transactionsCount'>;
 
 type TurnPage = () => void;
 
-export function EpochList(
-  props: TableProps<RecentEpoch> & {
+export function BlockList(
+  props: TableProps<RecentBlock> & {
     simplePage?: {
       onPrevPage: TurnPage;
       onNextPage: TurnPage;
@@ -21,11 +21,11 @@ export function EpochList(
 ) {
   const { t } = useTranslation();
 
-  const columns: ColumnProps<RecentEpoch>[] = [
+  const columns: ColumnProps<RecentBlock>[] = [
     {
       title: t('Height'),
-      dataIndex: 'epochId',
-      render: (epochId: number) => <EpochId epochId={epochId} />,
+      dataIndex: 'height',
+      render: (height: number) => <BlockHeight height={height} />,
     },
     {
       title: t('Timestamp'),
@@ -41,7 +41,7 @@ export function EpochList(
   return (
     <>
       <Table
-        rowKey={x => x.epochId.toString()}
+        rowKey={x => x.height.toString()}
         pagination={false}
         columns={columns}
         {...props}

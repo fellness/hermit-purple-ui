@@ -9231,10 +9231,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-muta-sdk@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.npm.taobao.org/muta-sdk/download/muta-sdk-0.3.0.tgz#8e3f40b92c8a7e549dc8a1621faeb4ec5cc02108"
-  integrity sha1-jj9AuSyKflSdyKFiH6607FzAIQg=
+muta-sdk@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npm.taobao.org/muta-sdk/download/muta-sdk-0.5.0.tgz#55749831b96eedb6c3d19587c7672a37526f7531"
+  integrity sha1-VXSYMblu7bbD0ZWHx2cqN1JvdTE=
   dependencies:
     "@graphql-codegen/typescript" "^1.10.0"
     "@graphql-codegen/typescript-graphql-request" "^1.10.0"

@@ -5,8 +5,13 @@ schema {
     mutation: Mutation
 }
 
-type Epoch {
-    epochId: Int!
+type Account {
+    address: String!
+    transactions(after: Int, before: Int, first: Int, last: Int, skip: Int): [Transaction!]!
+}
+
+type Block {
+    height: Int!
     orderedTransactionRoot: String!
     preHash: String!
     proof: Proof!
@@ -24,29 +29,33 @@ type Event {
 }
 
 type Mutation {
-    createOneEpoch(data: EpochCreateInput!): Epoch!
+    createOneBlock(data: BlockCreateInput!): Block!
     createOneTransaction(data: TransactionCreateInput!): Transaction!
     createOneValidator(data: ValidatorCreateInput!): Validator!
 }
 
 type Proof {
     bitmap: String!
-    epochHash: String!
+    blockHash: String!
     round: Int!
     signature: String!
 }
 
 type Query {
-    epoch(where: EpochWhereUniqueInput!): Epoch
-    epoches(after: Int, before: Int, first: Int, last: Int, orderBy: EpochOrderByInput, skip: Int, where: EpochWhereInput): [Epoch!]!
+    account(where: AccountWhereUniqueInput!): Account
+    accounts(after: Int, before: Int, first: Int, last: Int, orderBy: AccountOrderByInput, skip: Int, where: AccountWhereInput): [Account!]!
+    block(where: BlockWhereUniqueInput!): Block
+    blocks(after: Int, before: Int, first: Int, last: Int, orderBy: BlockOrderByInput, skip: Int, where: BlockWhereInput): [Block!]!
+    receipt(where: ReceiptWhereUniqueInput!): Receipt
+    receipts(after: Int, before: Int, first: Int, last: Int, orderBy: ReceiptOrderByInput, skip: Int, where: ReceiptWhereInput): [Receipt!]!
     transaction(where: TransactionWhereUniqueInput!): Transaction
     transactions(after: Int, before: Int, first: Int, last: Int, orderBy: TransactionOrderByInput, skip: Int, where: TransactionWhereInput): [Transaction!]!
     validator(where: ValidatorWhereUniqueInput!): Validator
 }
 
 type Receipt {
+    block: Block!
     cyclesUsed: String!
-    epoch: Epoch!
     events(after: Int, before: Int, first: Int, last: Int, skip: Int): [Event!]!
     response: ReceiptResponse!
     transaction: Transaction!
@@ -58,9 +67,10 @@ type ReceiptResponse {
 }
 
 type Transaction {
+    account: Account!
+    block: Block!
     cyclesLimit: String!
     cyclesPrice: String!
-    epoch: Epoch!
     method: String!
     nonce: String!
     payload: String!
@@ -73,7 +83,7 @@ type Transaction {
 
 type Validator {
     address: String!
-    epoches(after: Int, before: Int, first: Int, last: Int, skip: Int): [Epoch!]!
+    blocks(after: Int, before: Int, first: Int, last: Int, skip: Int): [Block!]!
     proposeWeight: Int!
     voteWeight: Int!
 }
@@ -81,6 +91,148 @@ type Validator {
 enum OrderByArg {
     asc
     desc
+}
+
+input AccountCreateOneWithoutTransactionsInput {
+    connect: AccountWhereUniqueInput
+    create: AccountCreateWithoutTransactionsInput
+}
+
+input AccountCreateWithoutTransactionsInput {
+    address: String!
+}
+
+input AccountOrderByInput {
+    address: OrderByArg
+    id: OrderByArg
+}
+
+input AccountWhereInput {
+    AND: [AccountWhereInput!]
+    NOT: [AccountWhereInput!]
+    OR: [AccountWhereInput!]
+    address: StringFilter
+    id: IntFilter
+    transactions: TransactionFilter
+}
+
+input AccountWhereUniqueInput {
+    address: String
+    id: Int
+}
+
+input BlockCreateInput {
+    height: Int!
+    orderRoot: String!
+    preHash: String!
+    proof: ProofCreateOneWithoutBlocksInput!
+    proposer: String!
+    receipts: ReceiptCreateManyWithoutBlockInput
+    stateRoot: String!
+    timestamp: DateTime!
+    transactions: TransactionCreateManyWithoutBlockInput
+    transactionsCount: Int!
+    validatorVersion: String!
+    validators: ValidatorCreateManyWithoutBlocksInput
+}
+
+input BlockCreateManyWithoutValidatorsInput {
+    connect: [BlockWhereUniqueInput!]
+    create: [BlockCreateWithoutValidatorsInput!]
+}
+
+input BlockCreateOneWithoutReceiptsInput {
+    connect: BlockWhereUniqueInput
+    create: BlockCreateWithoutReceiptsInput
+}
+
+input BlockCreateOneWithoutTransactionsInput {
+    connect: BlockWhereUniqueInput
+    create: BlockCreateWithoutTransactionsInput
+}
+
+input BlockCreateWithoutReceiptsInput {
+    height: Int!
+    orderRoot: String!
+    preHash: String!
+    proof: ProofCreateOneWithoutBlocksInput!
+    proposer: String!
+    stateRoot: String!
+    timestamp: DateTime!
+    transactions: TransactionCreateManyWithoutBlockInput
+    transactionsCount: Int!
+    validatorVersion: String!
+    validators: ValidatorCreateManyWithoutBlocksInput
+}
+
+input BlockCreateWithoutTransactionsInput {
+    height: Int!
+    orderRoot: String!
+    preHash: String!
+    proof: ProofCreateOneWithoutBlocksInput!
+    proposer: String!
+    receipts: ReceiptCreateManyWithoutBlockInput
+    stateRoot: String!
+    timestamp: DateTime!
+    transactionsCount: Int!
+    validatorVersion: String!
+    validators: ValidatorCreateManyWithoutBlocksInput
+}
+
+input BlockCreateWithoutValidatorsInput {
+    height: Int!
+    orderRoot: String!
+    preHash: String!
+    proof: ProofCreateOneWithoutBlocksInput!
+    proposer: String!
+    receipts: ReceiptCreateManyWithoutBlockInput
+    stateRoot: String!
+    timestamp: DateTime!
+    transactions: TransactionCreateManyWithoutBlockInput
+    transactionsCount: Int!
+    validatorVersion: String!
+}
+
+input BlockFilter {
+    every: BlockWhereInput
+    none: BlockWhereInput
+    some: BlockWhereInput
+}
+
+input BlockOrderByInput {
+    height: OrderByArg
+    id: OrderByArg
+    orderRoot: OrderByArg
+    preHash: OrderByArg
+    proposer: OrderByArg
+    stateRoot: OrderByArg
+    timestamp: OrderByArg
+    transactionsCount: OrderByArg
+    validatorVersion: OrderByArg
+}
+
+input BlockWhereInput {
+    AND: [BlockWhereInput!]
+    NOT: [BlockWhereInput!]
+    OR: [BlockWhereInput!]
+    height: IntFilter
+    id: IntFilter
+    orderRoot: StringFilter
+    preHash: StringFilter
+    proof: ProofWhereInput
+    proposer: StringFilter
+    receipts: ReceiptFilter
+    stateRoot: StringFilter
+    timestamp: DateTimeFilter
+    transactions: TransactionFilter
+    transactionsCount: IntFilter
+    validatorVersion: StringFilter
+    validators: ValidatorFilter
+}
+
+input BlockWhereUniqueInput {
+    height: Int
+    id: Int
 }
 
 input BooleanFilter {
@@ -99,102 +251,7 @@ input DateTimeFilter {
     notIn: [DateTime!]
 }
 
-input EpochCreateInput {
-    epochId: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutProofInput!
-    proposer: String!
-    receipts: ReceiptCreateManyWithoutReceiptsInput
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutTransactionsInput
-    transactionsCount: Int!
-    validatorVersion: String!
-    validators: ValidatorCreateManyWithoutValidatorsInput
-}
-
-input EpochCreateManyWithoutEpochesInput {
-    connect: [EpochWhereUniqueInput!]
-    create: [EpochCreateWithoutValidatorsInput!]
-}
-
-input EpochCreateOneWithoutEpochInput {
-    connect: EpochWhereUniqueInput
-    create: EpochCreateWithoutReceiptsInput
-}
-
-input EpochCreateWithoutReceiptsInput {
-    epochId: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutProofInput!
-    proposer: String!
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutTransactionsInput
-    transactionsCount: Int!
-    validatorVersion: String!
-    validators: ValidatorCreateManyWithoutValidatorsInput
-}
-
-input EpochCreateWithoutValidatorsInput {
-    epochId: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutProofInput!
-    proposer: String!
-    receipts: ReceiptCreateManyWithoutReceiptsInput
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutTransactionsInput
-    transactionsCount: Int!
-    validatorVersion: String!
-}
-
-input EpochFilter {
-    every: EpochWhereInput
-    none: EpochWhereInput
-    some: EpochWhereInput
-}
-
-input EpochOrderByInput {
-    epochId: OrderByArg
-    id: OrderByArg
-    orderRoot: OrderByArg
-    preHash: OrderByArg
-    proposer: OrderByArg
-    stateRoot: OrderByArg
-    timestamp: OrderByArg
-    transactionsCount: OrderByArg
-    validatorVersion: OrderByArg
-}
-
-input EpochWhereInput {
-    AND: [EpochWhereInput!]
-    NOT: [EpochWhereInput!]
-    OR: [EpochWhereInput!]
-    epochId: IntFilter
-    id: IntFilter
-    orderRoot: StringFilter
-    preHash: StringFilter
-    proof: ProofWhereInput
-    proposer: StringFilter
-    receipts: ReceiptFilter
-    stateRoot: StringFilter
-    timestamp: DateTimeFilter
-    transactions: TransactionFilter
-    transactionsCount: IntFilter
-    validatorVersion: StringFilter
-    validators: ValidatorFilter
-}
-
-input EpochWhereUniqueInput {
-    epochId: Int
-    id: Int
-}
-
-input EventCreateManyWithoutEventsInput {
+input EventCreateManyWithoutReceiptInput {
     connect: [EventWhereUniqueInput!]
     create: [EventCreateWithoutReceiptInput!]
 }
@@ -235,15 +292,15 @@ input IntFilter {
     notIn: [Int!]
 }
 
-input ProofCreateOneWithoutProofInput {
+input ProofCreateOneWithoutBlocksInput {
     connect: ProofWhereUniqueInput
-    create: ProofCreateWithoutEpochesInput
+    create: ProofCreateWithoutBlocksInput
 }
 
-input ProofCreateWithoutEpochesInput {
+input ProofCreateWithoutBlocksInput {
     bitmap: String!
-    epochHash: String!
-    epochId: Int!
+    blockHash: String!
+    height: Int!
     round: Int!
     signature: String!
 }
@@ -253,9 +310,9 @@ input ProofWhereInput {
     NOT: [ProofWhereInput!]
     OR: [ProofWhereInput!]
     bitmap: StringFilter
-    epochHash: StringFilter
-    epochId: IntFilter
-    epoches: EpochFilter
+    blockHash: StringFilter
+    blocks: BlockFilter
+    height: IntFilter
     id: IntFilter
     round: IntFilter
     signature: StringFilter
@@ -265,28 +322,28 @@ input ProofWhereUniqueInput {
     id: Int
 }
 
-input ReceiptCreateManyWithoutReceiptsInput {
+input ReceiptCreateManyWithoutBlockInput {
     connect: [ReceiptWhereUniqueInput!]
-    create: [ReceiptCreateWithoutEpochInput!]
+    create: [ReceiptCreateWithoutBlockInput!]
 }
 
-input ReceiptCreateOneWithoutReceiptInput {
+input ReceiptCreateOneWithoutTransactionInput {
     connect: ReceiptWhereUniqueInput
     create: ReceiptCreateWithoutTransactionInput
 }
 
-input ReceiptCreateWithoutEpochInput {
+input ReceiptCreateWithoutBlockInput {
     cyclesUsed: String!
-    events: EventCreateManyWithoutEventsInput
-    response: ReceiptResponseCreateOneWithoutResponseInput!
-    transaction: TransactionCreateOneWithoutTransactionInput!
+    events: EventCreateManyWithoutReceiptInput
+    response: ReceiptResponseCreateOneWithoutReceiptInput!
+    transaction: TransactionCreateOneWithoutReceiptInput!
 }
 
 input ReceiptCreateWithoutTransactionInput {
+    block: BlockCreateOneWithoutReceiptsInput!
     cyclesUsed: String!
-    epoch: EpochCreateOneWithoutEpochInput!
-    events: EventCreateManyWithoutEventsInput
-    response: ReceiptResponseCreateOneWithoutResponseInput!
+    events: EventCreateManyWithoutReceiptInput
+    response: ReceiptResponseCreateOneWithoutReceiptInput!
 }
 
 input ReceiptFilter {
@@ -295,7 +352,12 @@ input ReceiptFilter {
     some: ReceiptWhereInput
 }
 
-input ReceiptResponseCreateOneWithoutResponseInput {
+input ReceiptOrderByInput {
+    cyclesUsed: OrderByArg
+    id: OrderByArg
+}
+
+input ReceiptResponseCreateOneWithoutReceiptInput {
     connect: ReceiptResponseWhereUniqueInput
     create: ReceiptResponseCreateWithoutReceiptInput
 }
@@ -323,8 +385,8 @@ input ReceiptWhereInput {
     AND: [ReceiptWhereInput!]
     NOT: [ReceiptWhereInput!]
     OR: [ReceiptWhereInput!]
+    block: BlockWhereInput
     cyclesUsed: StringFilter
-    epoch: EpochWhereInput
     events: EventFilter
     id: IntFilter
     response: ReceiptResponseWhereInput
@@ -350,32 +412,34 @@ input StringFilter {
 }
 
 input TransactionCreateInput {
+    account: AccountCreateOneWithoutTransactionsInput!
+    block: BlockCreateOneWithoutTransactionsInput!
     chainId: String!
     cyclesLimit: String!
     cyclesPrice: String!
-    epoch: EpochCreateOneWithoutEpochInput!
     method: String!
     nonce: String!
     payload: String!
     pubkey: String!
-    receipt: ReceiptCreateOneWithoutReceiptInput
+    receipt: ReceiptCreateOneWithoutTransactionInput
     serviceName: String!
     signature: String!
     timeout: String!
     txHash: String!
 }
 
-input TransactionCreateManyWithoutTransactionsInput {
+input TransactionCreateManyWithoutBlockInput {
     connect: [TransactionWhereUniqueInput!]
-    create: [TransactionCreateWithoutEpochInput!]
+    create: [TransactionCreateWithoutBlockInput!]
 }
 
-input TransactionCreateOneWithoutTransactionInput {
+input TransactionCreateOneWithoutReceiptInput {
     connect: TransactionWhereUniqueInput
     create: TransactionCreateWithoutReceiptInput
 }
 
-input TransactionCreateWithoutEpochInput {
+input TransactionCreateWithoutBlockInput {
+    account: AccountCreateOneWithoutTransactionsInput!
     chainId: String!
     cyclesLimit: String!
     cyclesPrice: String!
@@ -383,7 +447,7 @@ input TransactionCreateWithoutEpochInput {
     nonce: String!
     payload: String!
     pubkey: String!
-    receipt: ReceiptCreateOneWithoutReceiptInput
+    receipt: ReceiptCreateOneWithoutTransactionInput
     serviceName: String!
     signature: String!
     timeout: String!
@@ -391,10 +455,11 @@ input TransactionCreateWithoutEpochInput {
 }
 
 input TransactionCreateWithoutReceiptInput {
+    account: AccountCreateOneWithoutTransactionsInput!
+    block: BlockCreateOneWithoutTransactionsInput!
     chainId: String!
     cyclesLimit: String!
     cyclesPrice: String!
-    epoch: EpochCreateOneWithoutEpochInput!
     method: String!
     nonce: String!
     payload: String!
@@ -430,10 +495,11 @@ input TransactionWhereInput {
     AND: [TransactionWhereInput!]
     NOT: [TransactionWhereInput!]
     OR: [TransactionWhereInput!]
+    account: AccountWhereInput
+    block: BlockWhereInput
     chainId: StringFilter
     cyclesLimit: StringFilter
     cyclesPrice: StringFilter
-    epoch: EpochWhereInput
     id: IntFilter
     method: StringFilter
     nonce: StringFilter
@@ -453,17 +519,17 @@ input TransactionWhereUniqueInput {
 
 input ValidatorCreateInput {
     address: String!
-    epoches: EpochCreateManyWithoutEpochesInput
+    blocks: BlockCreateManyWithoutValidatorsInput
     proposeWeight: Int!
     voteWeight: Int!
 }
 
-input ValidatorCreateManyWithoutValidatorsInput {
+input ValidatorCreateManyWithoutBlocksInput {
     connect: [ValidatorWhereUniqueInput!]
-    create: [ValidatorCreateWithoutEpochesInput!]
+    create: [ValidatorCreateWithoutBlocksInput!]
 }
 
-input ValidatorCreateWithoutEpochesInput {
+input ValidatorCreateWithoutBlocksInput {
     address: String!
     proposeWeight: Int!
     voteWeight: Int!
@@ -480,7 +546,7 @@ input ValidatorWhereInput {
     NOT: [ValidatorWhereInput!]
     OR: [ValidatorWhereInput!]
     address: StringFilter
-    epoches: EpochFilter
+    blocks: BlockFilter
     id: IntFilter
     proposeWeight: IntFilter
     voteWeight: IntFilter

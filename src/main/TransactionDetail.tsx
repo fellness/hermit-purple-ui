@@ -18,7 +18,7 @@ import {
   TransactionQueryVariables,
 } from '../generated/types';
 import { JSONLike } from '../container/JSONLike';
-import { EpochId } from '../container/EpochId';
+import { BlockHeight } from '../container/BlockHeight';
 import { $ElementType } from 'utility-types';
 import { HexWrapper } from '../container/Hex';
 
@@ -34,8 +34,8 @@ const QUERY_TRANSACTION = gql`
       txHash
       cyclesLimit
       cyclesPrice
-      epoch {
-        epochId
+      block {
+        height
       }
       serviceName
       method
@@ -117,8 +117,8 @@ export function TransactionDetail() {
           <Descriptions.Item label={t('Hash')}>
             <HexWrapper data={transaction.txHash} />
           </Descriptions.Item>
-          <Descriptions.Item label={t('Epoch')}>
-            <EpochId epochId={transaction.epoch.epochId} />
+          <Descriptions.Item label={t('Block')}>
+            <BlockHeight height={transaction.block.height} />
           </Descriptions.Item>
 
           <Descriptions.Item label={t('Service')}>

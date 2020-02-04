@@ -12,7 +12,7 @@ import { ColumnProps } from 'antd/es/table';
 import { $ElementType, ValuesType } from 'utility-types';
 import { Link } from 'react-router-dom';
 import { hexToNum } from '../utils';
-import { EpochId } from '../container/EpochId';
+import { BlockHeight } from '../container/BlockHeight';
 import { SimplePage } from '../container/SimplePage';
 
 const TRANSACTION_LIST_QUERY = gql`
@@ -23,8 +23,8 @@ const TRANSACTION_LIST_QUERY = gql`
       cyclesLimit
       serviceName
       method
-      epoch {
-        epochId
+      block {
+        height
       }
     }
   }
@@ -53,9 +53,9 @@ export const Transactions = () => {
     },
 
     {
-      title: t('Epoch'),
-      dataIndex: 'epoch.epochId',
-      render: epochId => <EpochId epochId={epochId} />,
+      title: t('Block'),
+      dataIndex: 'block.height',
+      render: height => <BlockHeight height={height} />,
     },
     {
       title: t('Service'),

@@ -52,8 +52,8 @@ export function AppHeader() {
         style={{ lineHeight: '64px' }}
         selectedKeys={[type]}
       >
-        <MenuItem key="epochs">
-          <Link to="/epochs">{t('Epochs')}</Link>
+        <MenuItem key="blocks">
+          <Link to="/blocks">{t('Blocks')}</Link>
         </MenuItem>
         <MenuItem key="transactions">
           <Link to="/transactions">{t('Transactions')}</Link>

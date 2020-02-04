@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { hexToNum } from '../../utils';
 import { Link } from 'react-router-dom';
 import { $ElementType, ValuesType } from 'utility-types';
-import { EpochId } from '../../container/EpochId';
+import { BlockHeight } from '../../container/BlockHeight';
 
 const QUERY_RECENT_TRANSACTION = gql`
   query recentTransactions {
@@ -17,8 +17,8 @@ const QUERY_RECENT_TRANSACTION = gql`
       txHash
       serviceName
       method
-      epoch {
-        epochId
+      block {
+        height
       }
     }
   }
@@ -46,9 +46,9 @@ export function RecentTransaction() {
       render: hash => <Link to={`/transactions/${hash}`}>{hash}</Link>,
     },
     {
-      title: t('Epoch'),
-      dataIndex: 'epoch.epochId',
-      render: id => <EpochId epochId={id} />,
+      title: t('Block'),
+      dataIndex: 'block.height',
+      render: id => <BlockHeight height={id} />,
     },
     { title: t('Cycles Price'), dataIndex: 'cyclesPrice', render: hexToNum },
     { title: t('Service'), dataIndex: 'serviceName' },

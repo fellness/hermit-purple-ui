@@ -4,8 +4,8 @@ import { Layout, Spin } from 'antd';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { QueryParamProvider } from 'use-query-params';
 import { Home } from './Home';
-import { Epochs } from './Epochs';
-import { EpochDetail } from './EpochDetail';
+import { Blocks } from './Blocks';
+import { BlockDetail } from './BlockDetail';
 import { Transactions } from './Transactions';
 import { TransactionDetail } from './TransactionDetail';
 import { AppHeader } from './App/AppHeader';
@@ -42,11 +42,11 @@ export function Main() {
                   <Route exact path="/">
                     <Home />
                   </Route>
-                  <Route exact path="/epochs">
-                    <Epochs />
+                  <Route exact path="/blocks">
+                    <Blocks />
                   </Route>
-                  <Route path="/epochs/:id">
-                    <EpochDetail />
+                  <Route path="/blocks/:id">
+                    <BlockDetail />
                   </Route>
                   <Route exact path="/transactions">
                     <Transactions />

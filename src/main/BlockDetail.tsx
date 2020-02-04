@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router';
 import { Descriptions, Empty, PageHeader, Spin } from 'antd';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { EpochQuery, EpochQueryVariables } from '../generated/types';
+import { BlockQuery, BlockQueryVariables } from '../generated/types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Timestamp } from '../container/Timestamp';
@@ -15,10 +15,10 @@ const DescriptionsWrapper = styled.div`
   }
 `;
 
-const QUERY_EPOCH = gql`
-  query epoch($epochId: Int) {
-    epoch(where: { epochId: $epochId }) {
-      epochId
+const QUERY_BLOCK = gql`
+  query block($height: Int) {
+    block(where: { height: $height }) {
+      height
       proof {
         round
       }
@@ -30,48 +30,48 @@ const QUERY_EPOCH = gql`
   }
 `;
 
-export function EpochDetail() {
+export function BlockDetail() {
   const { goBack } = useHistory();
   const { id } = useParams();
   const { t } = useTranslation();
 
-  const { data, loading } = useQuery<EpochQuery, EpochQueryVariables>(
-    QUERY_EPOCH,
+  const { data, loading } = useQuery<BlockQuery, BlockQueryVariables>(
+    QUERY_BLOCK,
     {
       variables: {
-        epochId: Number(id),
+        height: Number(id),
       },
     },
   );
 
   if (loading) return <Spin />;
-  if (!data || !data.epoch) return <Empty />;
+  if (!data || !data.block) return <Empty />;
 
-  const epoch = data.epoch;
+  const block = data.block;
 
   return (
     <PageHeader
-      title={`${t('Epoch')}`}
-      subTitle={epoch.epochId}
+      title={`${t('Block')}`}
+      subTitle={block.height}
       onBack={goBack}
     >
       <DescriptionsWrapper>
         <Descriptions column={1} bordered>
-          <Descriptions.Item label={t('Epoch')}>{id}</Descriptions.Item>
+          <Descriptions.Item label={t('Block')}>{id}</Descriptions.Item>
           <Descriptions.Item label={t('Timestamp')}>
-            <Timestamp timestamp={epoch.timestamp} />
+            <Timestamp timestamp={block.timestamp} />
           </Descriptions.Item>
           <Descriptions.Item label={t('Transaction Count')}>
-            {epoch.transactionsCount}
+            {block.transactionsCount}
           </Descriptions.Item>
           <Descriptions.Item label={t('Round ')}>
-            {epoch.proof.round}
+            {block.proof.round}
           </Descriptions.Item>
           <Descriptions.Item label={t('Validator Version')}>
-            <HexWrapper mode="number" data={epoch.validatorVersion} />
+            <HexWrapper mode="number" data={block.validatorVersion} />
           </Descriptions.Item>
           <Descriptions.Item label={t('State Root')}>
-            <HexWrapper data={epoch.stateRoot} />
+            <HexWrapper data={block.stateRoot} />
           </Descriptions.Item>
         </Descriptions>
       </DescriptionsWrapper>

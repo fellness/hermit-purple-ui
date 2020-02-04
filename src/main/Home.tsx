@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'antd';
 
 import { StatisticInfo } from './Home/StatisticInfo';
-import { RecentEpoch } from './Home/RecentEpoch';
+import { RecentBlock } from './Home/RecentBlock';
 import { RecentTransaction } from './Home/RecentTransaction';
 import { GlobalSearch } from './Home/GlobalSearch';
 
@@ -14,7 +14,7 @@ export function Home() {
       <div style={{ padding: '32px 0' }}>
         <Row gutter={24}>
           <Col span={12}>
-            <RecentEpoch />
+            <RecentBlock />
           </Col>
           <Col span={12}>
             <RecentTransaction />

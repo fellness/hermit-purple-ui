@@ -9,7 +9,7 @@ export function GlobalSearch() {
     if (/^(0x)?[abcdef0-9]{64}$/i.test(input)) {
       push(`/transactions/${input}`);
     } else if (Number(input) < 2147483647) {
-      push(`/epochs/${input}`);
+      push(`/blocks/${input}`);
     }
   }
 
@@ -17,7 +17,7 @@ export function GlobalSearch() {
     <div style={{ padding: '20px' }}>
       <Input.Search
         size="large"
-        placeholder="epoch / transaction"
+        placeholder="block / transaction"
         onSearch={handleOnSearch}
       />
     </div>

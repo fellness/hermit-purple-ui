@@ -9,6 +9,195 @@ export type Scalars = {
   DateTime: any,
 };
 
+export type Account = {
+   __typename?: 'Account',
+  address: Scalars['String'],
+  transactions: Array<Transaction>,
+};
+
+
+export type AccountTransactionsArgs = {
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Int']>,
+  before?: Maybe<Scalars['Int']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+export type AccountCreateOneWithoutTransactionsInput = {
+  create?: Maybe<AccountCreateWithoutTransactionsInput>,
+  connect?: Maybe<AccountWhereUniqueInput>,
+};
+
+export type AccountCreateWithoutTransactionsInput = {
+  address: Scalars['String'],
+};
+
+export type AccountOrderByInput = {
+  id?: Maybe<OrderByArg>,
+  address?: Maybe<OrderByArg>,
+};
+
+export type AccountWhereInput = {
+  id?: Maybe<IntFilter>,
+  address?: Maybe<StringFilter>,
+  transactions?: Maybe<TransactionFilter>,
+  AND?: Maybe<Array<AccountWhereInput>>,
+  OR?: Maybe<Array<AccountWhereInput>>,
+  NOT?: Maybe<Array<AccountWhereInput>>,
+};
+
+export type AccountWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>,
+  address?: Maybe<Scalars['String']>,
+};
+
+export type Block = {
+   __typename?: 'Block',
+  height: Scalars['Int'],
+  transactionsCount: Scalars['Int'],
+  transactions: Array<Transaction>,
+  preHash: Scalars['String'],
+  timestamp: Scalars['DateTime'],
+  orderedTransactionRoot: Scalars['String'],
+  stateRoot: Scalars['String'],
+  proof: Proof,
+  validatorVersion: Scalars['String'],
+  validators: Array<Validator>,
+};
+
+
+export type BlockTransactionsArgs = {
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Int']>,
+  before?: Maybe<Scalars['Int']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+
+export type BlockValidatorsArgs = {
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Int']>,
+  before?: Maybe<Scalars['Int']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+export type BlockCreateInput = {
+  height: Scalars['Int'],
+  transactionsCount: Scalars['Int'],
+  preHash: Scalars['String'],
+  timestamp: Scalars['DateTime'],
+  orderRoot: Scalars['String'],
+  stateRoot: Scalars['String'],
+  proposer: Scalars['String'],
+  validatorVersion: Scalars['String'],
+  transactions?: Maybe<TransactionCreateManyWithoutBlockInput>,
+  proof: ProofCreateOneWithoutBlocksInput,
+  validators?: Maybe<ValidatorCreateManyWithoutBlocksInput>,
+  receipts?: Maybe<ReceiptCreateManyWithoutBlockInput>,
+};
+
+export type BlockCreateManyWithoutValidatorsInput = {
+  create?: Maybe<Array<BlockCreateWithoutValidatorsInput>>,
+  connect?: Maybe<Array<BlockWhereUniqueInput>>,
+};
+
+export type BlockCreateOneWithoutReceiptsInput = {
+  create?: Maybe<BlockCreateWithoutReceiptsInput>,
+  connect?: Maybe<BlockWhereUniqueInput>,
+};
+
+export type BlockCreateOneWithoutTransactionsInput = {
+  create?: Maybe<BlockCreateWithoutTransactionsInput>,
+  connect?: Maybe<BlockWhereUniqueInput>,
+};
+
+export type BlockCreateWithoutReceiptsInput = {
+  height: Scalars['Int'],
+  transactionsCount: Scalars['Int'],
+  preHash: Scalars['String'],
+  timestamp: Scalars['DateTime'],
+  orderRoot: Scalars['String'],
+  stateRoot: Scalars['String'],
+  proposer: Scalars['String'],
+  validatorVersion: Scalars['String'],
+  transactions?: Maybe<TransactionCreateManyWithoutBlockInput>,
+  proof: ProofCreateOneWithoutBlocksInput,
+  validators?: Maybe<ValidatorCreateManyWithoutBlocksInput>,
+};
+
+export type BlockCreateWithoutTransactionsInput = {
+  height: Scalars['Int'],
+  transactionsCount: Scalars['Int'],
+  preHash: Scalars['String'],
+  timestamp: Scalars['DateTime'],
+  orderRoot: Scalars['String'],
+  stateRoot: Scalars['String'],
+  proposer: Scalars['String'],
+  validatorVersion: Scalars['String'],
+  proof: ProofCreateOneWithoutBlocksInput,
+  validators?: Maybe<ValidatorCreateManyWithoutBlocksInput>,
+  receipts?: Maybe<ReceiptCreateManyWithoutBlockInput>,
+};
+
+export type BlockCreateWithoutValidatorsInput = {
+  height: Scalars['Int'],
+  transactionsCount: Scalars['Int'],
+  preHash: Scalars['String'],
+  timestamp: Scalars['DateTime'],
+  orderRoot: Scalars['String'],
+  stateRoot: Scalars['String'],
+  proposer: Scalars['String'],
+  validatorVersion: Scalars['String'],
+  transactions?: Maybe<TransactionCreateManyWithoutBlockInput>,
+  proof: ProofCreateOneWithoutBlocksInput,
+  receipts?: Maybe<ReceiptCreateManyWithoutBlockInput>,
+};
+
+export type BlockFilter = {
+  every?: Maybe<BlockWhereInput>,
+  some?: Maybe<BlockWhereInput>,
+  none?: Maybe<BlockWhereInput>,
+};
+
+export type BlockOrderByInput = {
+  id?: Maybe<OrderByArg>,
+  height?: Maybe<OrderByArg>,
+  transactionsCount?: Maybe<OrderByArg>,
+  preHash?: Maybe<OrderByArg>,
+  timestamp?: Maybe<OrderByArg>,
+  orderRoot?: Maybe<OrderByArg>,
+  stateRoot?: Maybe<OrderByArg>,
+  proposer?: Maybe<OrderByArg>,
+  validatorVersion?: Maybe<OrderByArg>,
+};
+
+export type BlockWhereInput = {
+  id?: Maybe<IntFilter>,
+  height?: Maybe<IntFilter>,
+  transactionsCount?: Maybe<IntFilter>,
+  transactions?: Maybe<TransactionFilter>,
+  preHash?: Maybe<StringFilter>,
+  timestamp?: Maybe<DateTimeFilter>,
+  orderRoot?: Maybe<StringFilter>,
+  stateRoot?: Maybe<StringFilter>,
+  proposer?: Maybe<StringFilter>,
+  validatorVersion?: Maybe<StringFilter>,
+  validators?: Maybe<ValidatorFilter>,
+  receipts?: Maybe<ReceiptFilter>,
+  AND?: Maybe<Array<BlockWhereInput>>,
+  OR?: Maybe<Array<BlockWhereInput>>,
+  NOT?: Maybe<Array<BlockWhereInput>>,
+  proof?: Maybe<ProofWhereInput>,
+};
+
+export type BlockWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>,
+  height?: Maybe<Scalars['Int']>,
+};
+
 export type BooleanFilter = {
   equals?: Maybe<Scalars['Boolean']>,
   not?: Maybe<Scalars['Boolean']>,
@@ -26,140 +215,13 @@ export type DateTimeFilter = {
   gte?: Maybe<Scalars['DateTime']>,
 };
 
-export type Epoch = {
-   __typename?: 'Epoch',
-  epochId: Scalars['Int'],
-  transactionsCount: Scalars['Int'],
-  transactions: Array<Transaction>,
-  preHash: Scalars['String'],
-  timestamp: Scalars['DateTime'],
-  orderedTransactionRoot: Scalars['String'],
-  stateRoot: Scalars['String'],
-  proof: Proof,
-  validatorVersion: Scalars['String'],
-  validators: Array<Validator>,
-};
-
-
-export type EpochTransactionsArgs = {
-  skip?: Maybe<Scalars['Int']>,
-  after?: Maybe<Scalars['Int']>,
-  before?: Maybe<Scalars['Int']>,
-  first?: Maybe<Scalars['Int']>,
-  last?: Maybe<Scalars['Int']>
-};
-
-
-export type EpochValidatorsArgs = {
-  skip?: Maybe<Scalars['Int']>,
-  after?: Maybe<Scalars['Int']>,
-  before?: Maybe<Scalars['Int']>,
-  first?: Maybe<Scalars['Int']>,
-  last?: Maybe<Scalars['Int']>
-};
-
-export type EpochCreateInput = {
-  epochId: Scalars['Int'],
-  transactionsCount: Scalars['Int'],
-  preHash: Scalars['String'],
-  timestamp: Scalars['DateTime'],
-  orderRoot: Scalars['String'],
-  stateRoot: Scalars['String'],
-  proposer: Scalars['String'],
-  validatorVersion: Scalars['String'],
-  transactions?: Maybe<TransactionCreateManyWithoutTransactionsInput>,
-  proof: ProofCreateOneWithoutProofInput,
-  validators?: Maybe<ValidatorCreateManyWithoutValidatorsInput>,
-  receipts?: Maybe<ReceiptCreateManyWithoutReceiptsInput>,
-};
-
-export type EpochCreateManyWithoutEpochesInput = {
-  create?: Maybe<Array<EpochCreateWithoutValidatorsInput>>,
-  connect?: Maybe<Array<EpochWhereUniqueInput>>,
-};
-
-export type EpochCreateOneWithoutEpochInput = {
-  create?: Maybe<EpochCreateWithoutReceiptsInput>,
-  connect?: Maybe<EpochWhereUniqueInput>,
-};
-
-export type EpochCreateWithoutReceiptsInput = {
-  epochId: Scalars['Int'],
-  transactionsCount: Scalars['Int'],
-  preHash: Scalars['String'],
-  timestamp: Scalars['DateTime'],
-  orderRoot: Scalars['String'],
-  stateRoot: Scalars['String'],
-  proposer: Scalars['String'],
-  validatorVersion: Scalars['String'],
-  transactions?: Maybe<TransactionCreateManyWithoutTransactionsInput>,
-  proof: ProofCreateOneWithoutProofInput,
-  validators?: Maybe<ValidatorCreateManyWithoutValidatorsInput>,
-};
-
-export type EpochCreateWithoutValidatorsInput = {
-  epochId: Scalars['Int'],
-  transactionsCount: Scalars['Int'],
-  preHash: Scalars['String'],
-  timestamp: Scalars['DateTime'],
-  orderRoot: Scalars['String'],
-  stateRoot: Scalars['String'],
-  proposer: Scalars['String'],
-  validatorVersion: Scalars['String'],
-  transactions?: Maybe<TransactionCreateManyWithoutTransactionsInput>,
-  proof: ProofCreateOneWithoutProofInput,
-  receipts?: Maybe<ReceiptCreateManyWithoutReceiptsInput>,
-};
-
-export type EpochFilter = {
-  every?: Maybe<EpochWhereInput>,
-  some?: Maybe<EpochWhereInput>,
-  none?: Maybe<EpochWhereInput>,
-};
-
-export type EpochOrderByInput = {
-  id?: Maybe<OrderByArg>,
-  epochId?: Maybe<OrderByArg>,
-  transactionsCount?: Maybe<OrderByArg>,
-  preHash?: Maybe<OrderByArg>,
-  timestamp?: Maybe<OrderByArg>,
-  orderRoot?: Maybe<OrderByArg>,
-  stateRoot?: Maybe<OrderByArg>,
-  proposer?: Maybe<OrderByArg>,
-  validatorVersion?: Maybe<OrderByArg>,
-};
-
-export type EpochWhereInput = {
-  id?: Maybe<IntFilter>,
-  epochId?: Maybe<IntFilter>,
-  transactionsCount?: Maybe<IntFilter>,
-  transactions?: Maybe<TransactionFilter>,
-  preHash?: Maybe<StringFilter>,
-  timestamp?: Maybe<DateTimeFilter>,
-  orderRoot?: Maybe<StringFilter>,
-  stateRoot?: Maybe<StringFilter>,
-  proposer?: Maybe<StringFilter>,
-  validatorVersion?: Maybe<StringFilter>,
-  validators?: Maybe<ValidatorFilter>,
-  receipts?: Maybe<ReceiptFilter>,
-  AND?: Maybe<Array<EpochWhereInput>>,
-  OR?: Maybe<Array<EpochWhereInput>>,
-  NOT?: Maybe<Array<EpochWhereInput>>,
-  proof?: Maybe<ProofWhereInput>,
-};
-
-export type EpochWhereUniqueInput = {
-  id?: Maybe<Scalars['Int']>,
-  epochId?: Maybe<Scalars['Int']>,
-};
-
 export type Event = {
    __typename?: 'Event',
   data: Scalars['String'],
   receipt: Receipt,
 };
 
-export type EventCreateManyWithoutEventsInput = {
+export type EventCreateManyWithoutReceiptInput = {
   create?: Maybe<Array<EventCreateWithoutReceiptInput>>,
   connect?: Maybe<Array<EventWhereUniqueInput>>,
 };
@@ -202,14 +264,14 @@ export type IntFilter = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  createOneEpoch: Epoch,
+  createOneBlock: Block,
   createOneTransaction: Transaction,
   createOneValidator: Validator,
 };
 
 
-export type MutationCreateOneEpochArgs = {
-  data: EpochCreateInput
+export type MutationCreateOneBlockArgs = {
+  data: BlockCreateInput
 };
 
 
@@ -232,30 +294,30 @@ export type Proof = {
   signature: Scalars['String'],
   round: Scalars['Int'],
   bitmap: Scalars['String'],
-  epochHash: Scalars['String'],
+  blockHash: Scalars['String'],
 };
 
-export type ProofCreateOneWithoutProofInput = {
-  create?: Maybe<ProofCreateWithoutEpochesInput>,
+export type ProofCreateOneWithoutBlocksInput = {
+  create?: Maybe<ProofCreateWithoutBlocksInput>,
   connect?: Maybe<ProofWhereUniqueInput>,
 };
 
-export type ProofCreateWithoutEpochesInput = {
-  epochId: Scalars['Int'],
+export type ProofCreateWithoutBlocksInput = {
+  height: Scalars['Int'],
   round: Scalars['Int'],
-  epochHash: Scalars['String'],
+  blockHash: Scalars['String'],
   signature: Scalars['String'],
   bitmap: Scalars['String'],
 };
 
 export type ProofWhereInput = {
   id?: Maybe<IntFilter>,
-  epochId?: Maybe<IntFilter>,
+  height?: Maybe<IntFilter>,
   round?: Maybe<IntFilter>,
-  epochHash?: Maybe<StringFilter>,
+  blockHash?: Maybe<StringFilter>,
   signature?: Maybe<StringFilter>,
   bitmap?: Maybe<StringFilter>,
-  epoches?: Maybe<EpochFilter>,
+  blocks?: Maybe<BlockFilter>,
   AND?: Maybe<Array<ProofWhereInput>>,
   OR?: Maybe<Array<ProofWhereInput>>,
   NOT?: Maybe<Array<ProofWhereInput>>,
@@ -267,18 +329,20 @@ export type ProofWhereUniqueInput = {
 
 export type Query = {
    __typename?: 'Query',
-  epoch?: Maybe<Epoch>,
+  block?: Maybe<Block>,
   transaction?: Maybe<Transaction>,
   validator?: Maybe<Validator>,
   receipt?: Maybe<Receipt>,
-  epoches: Array<Epoch>,
+  account?: Maybe<Account>,
+  accounts: Array<Account>,
+  blocks: Array<Block>,
   transactions: Array<Transaction>,
   receipts: Array<Receipt>,
 };
 
 
-export type QueryEpochArgs = {
-  where: EpochWhereUniqueInput
+export type QueryBlockArgs = {
+  where: BlockWhereUniqueInput
 };
 
 
@@ -297,9 +361,25 @@ export type QueryReceiptArgs = {
 };
 
 
-export type QueryEpochesArgs = {
-  where?: Maybe<EpochWhereInput>,
-  orderBy?: Maybe<EpochOrderByInput>,
+export type QueryAccountArgs = {
+  where: AccountWhereUniqueInput
+};
+
+
+export type QueryAccountsArgs = {
+  where?: Maybe<AccountWhereInput>,
+  orderBy?: Maybe<AccountOrderByInput>,
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Int']>,
+  before?: Maybe<Scalars['Int']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryBlocksArgs = {
+  where?: Maybe<BlockWhereInput>,
+  orderBy?: Maybe<BlockOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['Int']>,
   before?: Maybe<Scalars['Int']>,
@@ -331,7 +411,7 @@ export type QueryReceiptsArgs = {
 
 export type Receipt = {
    __typename?: 'Receipt',
-  epoch: Epoch,
+  block: Block,
   transaction: Transaction,
   cyclesUsed: Scalars['String'],
   events: Array<Event>,
@@ -347,28 +427,28 @@ export type ReceiptEventsArgs = {
   last?: Maybe<Scalars['Int']>
 };
 
-export type ReceiptCreateManyWithoutReceiptsInput = {
-  create?: Maybe<Array<ReceiptCreateWithoutEpochInput>>,
+export type ReceiptCreateManyWithoutBlockInput = {
+  create?: Maybe<Array<ReceiptCreateWithoutBlockInput>>,
   connect?: Maybe<Array<ReceiptWhereUniqueInput>>,
 };
 
-export type ReceiptCreateOneWithoutReceiptInput = {
+export type ReceiptCreateOneWithoutTransactionInput = {
   create?: Maybe<ReceiptCreateWithoutTransactionInput>,
   connect?: Maybe<ReceiptWhereUniqueInput>,
 };
 
-export type ReceiptCreateWithoutEpochInput = {
+export type ReceiptCreateWithoutBlockInput = {
   cyclesUsed: Scalars['String'],
-  transaction: TransactionCreateOneWithoutTransactionInput,
-  events?: Maybe<EventCreateManyWithoutEventsInput>,
-  response: ReceiptResponseCreateOneWithoutResponseInput,
+  transaction: TransactionCreateOneWithoutReceiptInput,
+  events?: Maybe<EventCreateManyWithoutReceiptInput>,
+  response: ReceiptResponseCreateOneWithoutReceiptInput,
 };
 
 export type ReceiptCreateWithoutTransactionInput = {
   cyclesUsed: Scalars['String'],
-  epoch: EpochCreateOneWithoutEpochInput,
-  events?: Maybe<EventCreateManyWithoutEventsInput>,
-  response: ReceiptResponseCreateOneWithoutResponseInput,
+  block: BlockCreateOneWithoutReceiptsInput,
+  events?: Maybe<EventCreateManyWithoutReceiptInput>,
+  response: ReceiptResponseCreateOneWithoutReceiptInput,
 };
 
 export type ReceiptFilter = {
@@ -388,7 +468,7 @@ export type ReceiptResponse = {
   ret: Scalars['String'],
 };
 
-export type ReceiptResponseCreateOneWithoutResponseInput = {
+export type ReceiptResponseCreateOneWithoutReceiptInput = {
   create?: Maybe<ReceiptResponseCreateWithoutReceiptInput>,
   connect?: Maybe<ReceiptResponseWhereUniqueInput>,
 };
@@ -419,7 +499,7 @@ export type ReceiptWhereInput = {
   AND?: Maybe<Array<ReceiptWhereInput>>,
   OR?: Maybe<Array<ReceiptWhereInput>>,
   NOT?: Maybe<Array<ReceiptWhereInput>>,
-  epoch?: Maybe<EpochWhereInput>,
+  block?: Maybe<BlockWhereInput>,
   transaction?: Maybe<TransactionWhereInput>,
   response?: Maybe<ReceiptResponseWhereInput>,
 };
@@ -445,13 +525,14 @@ export type StringFilter = {
 export type Transaction = {
    __typename?: 'Transaction',
   txHash: Scalars['String'],
-  epoch: Epoch,
+  block: Block,
   serviceName: Scalars['String'],
   method: Scalars['String'],
   payload: Scalars['String'],
   cyclesPrice: Scalars['String'],
   cyclesLimit: Scalars['String'],
   nonce: Scalars['String'],
+  account: Account,
   pubkey: Scalars['String'],
   signature: Scalars['String'],
   receipt?: Maybe<Receipt>,
@@ -469,21 +550,22 @@ export type TransactionCreateInput = {
   signature: Scalars['String'],
   chainId: Scalars['String'],
   timeout: Scalars['String'],
-  receipt?: Maybe<ReceiptCreateOneWithoutReceiptInput>,
-  epoch: EpochCreateOneWithoutEpochInput,
+  receipt?: Maybe<ReceiptCreateOneWithoutTransactionInput>,
+  block: BlockCreateOneWithoutTransactionsInput,
+  account: AccountCreateOneWithoutTransactionsInput,
 };
 
-export type TransactionCreateManyWithoutTransactionsInput = {
-  create?: Maybe<Array<TransactionCreateWithoutEpochInput>>,
+export type TransactionCreateManyWithoutBlockInput = {
+  create?: Maybe<Array<TransactionCreateWithoutBlockInput>>,
   connect?: Maybe<Array<TransactionWhereUniqueInput>>,
 };
 
-export type TransactionCreateOneWithoutTransactionInput = {
+export type TransactionCreateOneWithoutReceiptInput = {
   create?: Maybe<TransactionCreateWithoutReceiptInput>,
   connect?: Maybe<TransactionWhereUniqueInput>,
 };
 
-export type TransactionCreateWithoutEpochInput = {
+export type TransactionCreateWithoutBlockInput = {
   txHash: Scalars['String'],
   serviceName: Scalars['String'],
   method: Scalars['String'],
@@ -495,7 +577,8 @@ export type TransactionCreateWithoutEpochInput = {
   signature: Scalars['String'],
   chainId: Scalars['String'],
   timeout: Scalars['String'],
-  receipt?: Maybe<ReceiptCreateOneWithoutReceiptInput>,
+  receipt?: Maybe<ReceiptCreateOneWithoutTransactionInput>,
+  account: AccountCreateOneWithoutTransactionsInput,
 };
 
 export type TransactionCreateWithoutReceiptInput = {
@@ -510,7 +593,8 @@ export type TransactionCreateWithoutReceiptInput = {
   signature: Scalars['String'],
   chainId: Scalars['String'],
   timeout: Scalars['String'],
-  epoch: EpochCreateOneWithoutEpochInput,
+  block: BlockCreateOneWithoutTransactionsInput,
+  account: AccountCreateOneWithoutTransactionsInput,
 };
 
 export type TransactionFilter = {
@@ -551,7 +635,8 @@ export type TransactionWhereInput = {
   OR?: Maybe<Array<TransactionWhereInput>>,
   NOT?: Maybe<Array<TransactionWhereInput>>,
   receipt?: Maybe<ReceiptWhereInput>,
-  epoch?: Maybe<EpochWhereInput>,
+  block?: Maybe<BlockWhereInput>,
+  account?: Maybe<AccountWhereInput>,
 };
 
 export type TransactionWhereUniqueInput = {
@@ -564,11 +649,11 @@ export type Validator = {
   address: Scalars['String'],
   proposeWeight: Scalars['Int'],
   voteWeight: Scalars['Int'],
-  epoches: Array<Epoch>,
+  blocks: Array<Block>,
 };
 
 
-export type ValidatorEpochesArgs = {
+export type ValidatorBlocksArgs = {
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['Int']>,
   before?: Maybe<Scalars['Int']>,
@@ -580,15 +665,15 @@ export type ValidatorCreateInput = {
   address: Scalars['String'],
   proposeWeight: Scalars['Int'],
   voteWeight: Scalars['Int'],
-  epoches?: Maybe<EpochCreateManyWithoutEpochesInput>,
+  blocks?: Maybe<BlockCreateManyWithoutValidatorsInput>,
 };
 
-export type ValidatorCreateManyWithoutValidatorsInput = {
-  create?: Maybe<Array<ValidatorCreateWithoutEpochesInput>>,
+export type ValidatorCreateManyWithoutBlocksInput = {
+  create?: Maybe<Array<ValidatorCreateWithoutBlocksInput>>,
   connect?: Maybe<Array<ValidatorWhereUniqueInput>>,
 };
 
-export type ValidatorCreateWithoutEpochesInput = {
+export type ValidatorCreateWithoutBlocksInput = {
   address: Scalars['String'],
   proposeWeight: Scalars['Int'],
   voteWeight: Scalars['Int'],
@@ -605,7 +690,7 @@ export type ValidatorWhereInput = {
   address?: Maybe<StringFilter>,
   proposeWeight?: Maybe<IntFilter>,
   voteWeight?: Maybe<IntFilter>,
-  epoches?: Maybe<EpochFilter>,
+  blocks?: Maybe<BlockFilter>,
   AND?: Maybe<Array<ValidatorWhereInput>>,
   OR?: Maybe<Array<ValidatorWhereInput>>,
   NOT?: Maybe<Array<ValidatorWhereInput>>,
@@ -616,16 +701,16 @@ export type ValidatorWhereUniqueInput = {
   address?: Maybe<Scalars['String']>,
 };
 
-export type EpochQueryVariables = {
-  epochId?: Maybe<Scalars['Int']>
+export type BlockQueryVariables = {
+  height?: Maybe<Scalars['Int']>
 };
 
 
-export type EpochQuery = (
+export type BlockQuery = (
   { __typename?: 'Query' }
-  & { epoch: Maybe<(
-    { __typename?: 'Epoch' }
-    & Pick<Epoch, 'epochId' | 'stateRoot' | 'timestamp' | 'transactionsCount' | 'validatorVersion'>
+  & { block: Maybe<(
+    { __typename?: 'Block' }
+    & Pick<Block, 'height' | 'stateRoot' | 'timestamp' | 'transactionsCount' | 'validatorVersion'>
     & { proof: (
       { __typename?: 'Proof' }
       & Pick<Proof, 'round'>
@@ -633,28 +718,28 @@ export type EpochQuery = (
   )> }
 );
 
-export type EpochsListQueryVariables = {
+export type BlocksListQueryVariables = {
   skip?: Maybe<Scalars['Int']>,
   perPage?: Maybe<Scalars['Int']>
 };
 
 
-export type EpochsListQuery = (
+export type BlocksListQuery = (
   { __typename?: 'Query' }
-  & { epoches: Array<(
-    { __typename?: 'Epoch' }
-    & Pick<Epoch, 'epochId' | 'timestamp' | 'transactionsCount'>
+  & { blocks: Array<(
+    { __typename?: 'Block' }
+    & Pick<Block, 'height' | 'timestamp' | 'transactionsCount'>
   )> }
 );
 
-export type RecentEpochesQueryVariables = {};
+export type RecentBlocksQueryVariables = {};
 
 
-export type RecentEpochesQuery = (
+export type RecentBlocksQuery = (
   { __typename?: 'Query' }
-  & { epoches: Array<(
-    { __typename?: 'Epoch' }
-    & Pick<Epoch, 'epochId' | 'transactionsCount' | 'timestamp'>
+  & { blocks: Array<(
+    { __typename?: 'Block' }
+    & Pick<Block, 'height' | 'transactionsCount' | 'timestamp'>
   )> }
 );
 
@@ -666,21 +751,21 @@ export type RecentTransactionsQuery = (
   & { transactions: Array<(
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'cyclesPrice' | 'txHash' | 'serviceName' | 'method'>
-    & { epoch: (
-      { __typename?: 'Epoch' }
-      & Pick<Epoch, 'epochId'>
+    & { block: (
+      { __typename?: 'Block' }
+      & Pick<Block, 'height'>
     ) }
   )> }
 );
 
-export type LatestEpochQueryVariables = {};
+export type LatestBlockQueryVariables = {};
 
 
-export type LatestEpochQuery = (
+export type LatestBlockQuery = (
   { __typename?: 'Query' }
-  & { epoches: Array<(
-    { __typename?: 'Epoch' }
-    & Pick<Epoch, 'epochId' | 'timestamp'>
+  & { blocks: Array<(
+    { __typename?: 'Block' }
+    & Pick<Block, 'height' | 'timestamp'>
     & { validators: Array<(
       { __typename?: 'Validator' }
       & Pick<Validator, 'address'>
@@ -698,9 +783,9 @@ export type TransactionQuery = (
   & { transaction: Maybe<(
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'txHash' | 'cyclesLimit' | 'cyclesPrice' | 'serviceName' | 'method' | 'payload' | 'nonce' | 'pubkey' | 'signature'>
-    & { epoch: (
-      { __typename?: 'Epoch' }
-      & Pick<Epoch, 'epochId'>
+    & { block: (
+      { __typename?: 'Block' }
+      & Pick<Block, 'height'>
     ), receipt: Maybe<(
       { __typename?: 'Receipt' }
       & Pick<Receipt, 'cyclesUsed'>
@@ -723,9 +808,9 @@ export type GetTransactionListQuery = (
   & { transactions: Array<(
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'txHash' | 'cyclesPrice' | 'cyclesLimit' | 'serviceName' | 'method'>
-    & { epoch: (
-      { __typename?: 'Epoch' }
-      & Pick<Epoch, 'epochId'>
+    & { block: (
+      { __typename?: 'Block' }
+      & Pick<Block, 'height'>
     ) }
   )> }
 );
