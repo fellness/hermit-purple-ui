@@ -47,7 +47,7 @@ type Transaction = ValuesType<
 
 export function AddressDetail() {
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { id: address } = useParams();
 
   const {
     query: { data, loading },
@@ -58,7 +58,7 @@ export function AddressDetail() {
     QUERY_ACCOUNT_TRANSACTION,
     {
       variables: {
-        address: id as string,
+        address: address as string,
       },
     },
   );
@@ -102,7 +102,7 @@ export function AddressDetail() {
   const hasNextPage = length === undefined ? false : length >= 10;
 
   return (
-    <PageHeader title={t('Address')}>
+    <PageHeader title={t('Address')} subTitle={address}>
       <Table
         loading={loading}
         columns={columns}

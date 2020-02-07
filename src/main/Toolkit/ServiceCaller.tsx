@@ -17,6 +17,7 @@ export function ServiceCaller() {
   const { t } = useTranslation();
 
   const muta = useMuta();
+  const client = muta.client();
 
   const handleSubmit: FormikConfig<ServiceForm>['onSubmit'] = async (
     value,
@@ -25,7 +26,7 @@ export function ServiceCaller() {
     const service = value.service;
     const { serviceName, method, payload, payloadType } = service;
 
-    const tx = await muta.client.prepareTransaction({
+    const tx = await client.composeTransaction({
       serviceName,
       method,
       payload: payloadType === PayloadType.JSON ? JSON.parse(payload) : payload,
@@ -36,7 +37,7 @@ export function ServiceCaller() {
       '0x1000000000000000000000000000000000000000000000000000000000000000',
     ).signTransaction(tx);
 
-    const txHash = await muta.client.sendTransaction(signed);
+    const txHash = await client.sendTransaction(signed);
     message.success(`write success, hash is ${txHash}`);
     setSubmitting(false);
   };
