@@ -2,12 +2,28 @@
 
 schema {
     query: Query
-    mutation: Mutation
 }
 
 type Account {
     address: String!
     transactions(after: Int, before: Int, first: Int, last: Int, skip: Int): [Transaction!]!
+}
+
+type Asset {
+    account: Account!
+    assetId: String!
+    assetTransfers(after: Int, before: Int, first: Int, last: Int, skip: Int): [AssetTransfer!]!
+    creationTransaction: Transaction!
+    name: String!
+    supply: String!
+    symbol: String!
+}
+
+type AssetTransfer {
+    from: Account!
+    to: Account!
+    transaction: Transaction!
+    value: String!
 }
 
 type Block {
@@ -28,12 +44,6 @@ type Event {
     receipt: Receipt!
 }
 
-type Mutation {
-    createOneBlock(data: BlockCreateInput!): Block!
-    createOneTransaction(data: TransactionCreateInput!): Transaction!
-    createOneValidator(data: ValidatorCreateInput!): Validator!
-}
-
 type Proof {
     bitmap: String!
     blockHash: String!
@@ -44,6 +54,10 @@ type Proof {
 type Query {
     account(where: AccountWhereUniqueInput!): Account
     accounts(after: Int, before: Int, first: Int, last: Int, orderBy: AccountOrderByInput, skip: Int, where: AccountWhereInput): [Account!]!
+    asset(where: AssetWhereUniqueInput!): Asset
+    assetTransfer(where: AssetTransferWhereUniqueInput!): AssetTransfer
+    assetTransfers(after: Int, before: Int, first: Int, last: Int, orderBy: AssetTransferOrderByInput, skip: Int, where: AssetTransferWhereInput): [AssetTransfer!]!
+    assets(after: Int, before: Int, first: Int, last: Int, orderBy: AssetOrderByInput, skip: Int, where: AssetWhereInput): [Asset!]!
     block(where: BlockWhereUniqueInput!): Block
     blocks(after: Int, before: Int, first: Int, last: Int, orderBy: BlockOrderByInput, skip: Int, where: BlockWhereInput): [Block!]!
     receipt(where: ReceiptWhereUniqueInput!): Receipt
@@ -54,7 +68,6 @@ type Query {
 }
 
 type Receipt {
-    block: Block!
     cyclesUsed: String!
     events(after: Int, before: Int, first: Int, last: Int, skip: Int): [Event!]!
     response: ReceiptResponse!
@@ -93,15 +106,6 @@ enum OrderByArg {
     desc
 }
 
-input AccountCreateOneWithoutTransactionsInput {
-    connect: AccountWhereUniqueInput
-    create: AccountCreateWithoutTransactionsInput
-}
-
-input AccountCreateWithoutTransactionsInput {
-    address: String!
-}
-
 input AccountOrderByInput {
     address: OrderByArg
     id: OrderByArg
@@ -112,8 +116,11 @@ input AccountWhereInput {
     NOT: [AccountWhereInput!]
     OR: [AccountWhereInput!]
     address: StringFilter
+    assets: AssetFilter
     id: IntFilter
     transactions: TransactionFilter
+    transferFrom: AssetTransferFilter
+    transferTo: AssetTransferFilter
 }
 
 input AccountWhereUniqueInput {
@@ -121,76 +128,64 @@ input AccountWhereUniqueInput {
     id: Int
 }
 
-input BlockCreateInput {
-    height: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutBlocksInput!
-    proposer: String!
-    receipts: ReceiptCreateManyWithoutBlockInput
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutBlockInput
-    transactionsCount: Int!
-    validatorVersion: String!
-    validators: ValidatorCreateManyWithoutBlocksInput
+input AssetFilter {
+    every: AssetWhereInput
+    none: AssetWhereInput
+    some: AssetWhereInput
 }
 
-input BlockCreateManyWithoutValidatorsInput {
-    connect: [BlockWhereUniqueInput!]
-    create: [BlockCreateWithoutValidatorsInput!]
+input AssetOrderByInput {
+    assetId: OrderByArg
+    id: OrderByArg
+    name: OrderByArg
+    supply: OrderByArg
+    symbol: OrderByArg
 }
 
-input BlockCreateOneWithoutReceiptsInput {
-    connect: BlockWhereUniqueInput
-    create: BlockCreateWithoutReceiptsInput
+input AssetTransferFilter {
+    every: AssetTransferWhereInput
+    none: AssetTransferWhereInput
+    some: AssetTransferWhereInput
 }
 
-input BlockCreateOneWithoutTransactionsInput {
-    connect: BlockWhereUniqueInput
-    create: BlockCreateWithoutTransactionsInput
+input AssetTransferOrderByInput {
+    id: OrderByArg
+    value: OrderByArg
 }
 
-input BlockCreateWithoutReceiptsInput {
-    height: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutBlocksInput!
-    proposer: String!
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutBlockInput
-    transactionsCount: Int!
-    validatorVersion: String!
-    validators: ValidatorCreateManyWithoutBlocksInput
+input AssetTransferWhereInput {
+    AND: [AssetTransferWhereInput!]
+    NOT: [AssetTransferWhereInput!]
+    OR: [AssetTransferWhereInput!]
+    asset: AssetWhereInput
+    from: AccountWhereInput
+    id: IntFilter
+    to: AccountWhereInput
+    transaction: TransactionWhereInput
+    value: StringFilter
 }
 
-input BlockCreateWithoutTransactionsInput {
-    height: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutBlocksInput!
-    proposer: String!
-    receipts: ReceiptCreateManyWithoutBlockInput
-    stateRoot: String!
-    timestamp: DateTime!
-    transactionsCount: Int!
-    validatorVersion: String!
-    validators: ValidatorCreateManyWithoutBlocksInput
+input AssetTransferWhereUniqueInput {
+    id: Int
 }
 
-input BlockCreateWithoutValidatorsInput {
-    height: Int!
-    orderRoot: String!
-    preHash: String!
-    proof: ProofCreateOneWithoutBlocksInput!
-    proposer: String!
-    receipts: ReceiptCreateManyWithoutBlockInput
-    stateRoot: String!
-    timestamp: DateTime!
-    transactions: TransactionCreateManyWithoutBlockInput
-    transactionsCount: Int!
-    validatorVersion: String!
+input AssetWhereInput {
+    AND: [AssetWhereInput!]
+    NOT: [AssetWhereInput!]
+    OR: [AssetWhereInput!]
+    account: AccountWhereInput
+    assetId: StringFilter
+    assetTransfers: AssetTransferFilter
+    creationTransaction: TransactionWhereInput
+    id: IntFilter
+    name: StringFilter
+    supply: StringFilter
+    symbol: StringFilter
+}
+
+input AssetWhereUniqueInput {
+    assetId: String
+    id: Int
 }
 
 input BlockFilter {
@@ -221,7 +216,6 @@ input BlockWhereInput {
     preHash: StringFilter
     proof: ProofWhereInput
     proposer: StringFilter
-    receipts: ReceiptFilter
     stateRoot: StringFilter
     timestamp: DateTimeFilter
     transactions: TransactionFilter
@@ -251,16 +245,6 @@ input DateTimeFilter {
     notIn: [DateTime!]
 }
 
-input EventCreateManyWithoutReceiptInput {
-    connect: [EventWhereUniqueInput!]
-    create: [EventCreateWithoutReceiptInput!]
-}
-
-input EventCreateWithoutReceiptInput {
-    data: String!
-    service: String!
-}
-
 input EventFilter {
     every: EventWhereInput
     none: EventWhereInput
@@ -277,10 +261,6 @@ input EventWhereInput {
     service: StringFilter
 }
 
-input EventWhereUniqueInput {
-    id: Int
-}
-
 input IntFilter {
     equals: Int
     gt: Int
@@ -290,19 +270,6 @@ input IntFilter {
     lte: Int
     not: Int
     notIn: [Int!]
-}
-
-input ProofCreateOneWithoutBlocksInput {
-    connect: ProofWhereUniqueInput
-    create: ProofCreateWithoutBlocksInput
-}
-
-input ProofCreateWithoutBlocksInput {
-    bitmap: String!
-    blockHash: String!
-    height: Int!
-    round: Int!
-    signature: String!
 }
 
 input ProofWhereInput {
@@ -318,53 +285,9 @@ input ProofWhereInput {
     signature: StringFilter
 }
 
-input ProofWhereUniqueInput {
-    id: Int
-}
-
-input ReceiptCreateManyWithoutBlockInput {
-    connect: [ReceiptWhereUniqueInput!]
-    create: [ReceiptCreateWithoutBlockInput!]
-}
-
-input ReceiptCreateOneWithoutTransactionInput {
-    connect: ReceiptWhereUniqueInput
-    create: ReceiptCreateWithoutTransactionInput
-}
-
-input ReceiptCreateWithoutBlockInput {
-    cyclesUsed: String!
-    events: EventCreateManyWithoutReceiptInput
-    response: ReceiptResponseCreateOneWithoutReceiptInput!
-    transaction: TransactionCreateOneWithoutReceiptInput!
-}
-
-input ReceiptCreateWithoutTransactionInput {
-    block: BlockCreateOneWithoutReceiptsInput!
-    cyclesUsed: String!
-    events: EventCreateManyWithoutReceiptInput
-    response: ReceiptResponseCreateOneWithoutReceiptInput!
-}
-
-input ReceiptFilter {
-    every: ReceiptWhereInput
-    none: ReceiptWhereInput
-    some: ReceiptWhereInput
-}
-
 input ReceiptOrderByInput {
     cyclesUsed: OrderByArg
     id: OrderByArg
-}
-
-input ReceiptResponseCreateOneWithoutReceiptInput {
-    connect: ReceiptResponseWhereUniqueInput
-    create: ReceiptResponseCreateWithoutReceiptInput
-}
-
-input ReceiptResponseCreateWithoutReceiptInput {
-    isError: Boolean!
-    ret: String!
 }
 
 input ReceiptResponseWhereInput {
@@ -377,15 +300,10 @@ input ReceiptResponseWhereInput {
     ret: StringFilter
 }
 
-input ReceiptResponseWhereUniqueInput {
-    id: Int
-}
-
 input ReceiptWhereInput {
     AND: [ReceiptWhereInput!]
     NOT: [ReceiptWhereInput!]
     OR: [ReceiptWhereInput!]
-    block: BlockWhereInput
     cyclesUsed: StringFilter
     events: EventFilter
     id: IntFilter
@@ -409,65 +327,6 @@ input StringFilter {
     not: String
     notIn: [String!]
     startsWith: String
-}
-
-input TransactionCreateInput {
-    account: AccountCreateOneWithoutTransactionsInput!
-    block: BlockCreateOneWithoutTransactionsInput!
-    chainId: String!
-    cyclesLimit: String!
-    cyclesPrice: String!
-    method: String!
-    nonce: String!
-    payload: String!
-    pubkey: String!
-    receipt: ReceiptCreateOneWithoutTransactionInput
-    serviceName: String!
-    signature: String!
-    timeout: String!
-    txHash: String!
-}
-
-input TransactionCreateManyWithoutBlockInput {
-    connect: [TransactionWhereUniqueInput!]
-    create: [TransactionCreateWithoutBlockInput!]
-}
-
-input TransactionCreateOneWithoutReceiptInput {
-    connect: TransactionWhereUniqueInput
-    create: TransactionCreateWithoutReceiptInput
-}
-
-input TransactionCreateWithoutBlockInput {
-    account: AccountCreateOneWithoutTransactionsInput!
-    chainId: String!
-    cyclesLimit: String!
-    cyclesPrice: String!
-    method: String!
-    nonce: String!
-    payload: String!
-    pubkey: String!
-    receipt: ReceiptCreateOneWithoutTransactionInput
-    serviceName: String!
-    signature: String!
-    timeout: String!
-    txHash: String!
-}
-
-input TransactionCreateWithoutReceiptInput {
-    account: AccountCreateOneWithoutTransactionsInput!
-    block: BlockCreateOneWithoutTransactionsInput!
-    chainId: String!
-    cyclesLimit: String!
-    cyclesPrice: String!
-    method: String!
-    nonce: String!
-    payload: String!
-    pubkey: String!
-    serviceName: String!
-    signature: String!
-    timeout: String!
-    txHash: String!
 }
 
 input TransactionFilter {
@@ -498,6 +357,7 @@ input TransactionWhereInput {
     account: AccountWhereInput
     block: BlockWhereInput
     chainId: StringFilter
+    createdAsset: AssetWhereInput
     cyclesLimit: StringFilter
     cyclesPrice: StringFilter
     id: IntFilter
@@ -509,30 +369,13 @@ input TransactionWhereInput {
     serviceName: StringFilter
     signature: StringFilter
     timeout: StringFilter
+    transfer: AssetTransferWhereInput
     txHash: StringFilter
 }
 
 input TransactionWhereUniqueInput {
     id: Int
     txHash: String
-}
-
-input ValidatorCreateInput {
-    address: String!
-    blocks: BlockCreateManyWithoutValidatorsInput
-    proposeWeight: Int!
-    voteWeight: Int!
-}
-
-input ValidatorCreateManyWithoutBlocksInput {
-    connect: [ValidatorWhereUniqueInput!]
-    create: [ValidatorCreateWithoutBlocksInput!]
-}
-
-input ValidatorCreateWithoutBlocksInput {
-    address: String!
-    proposeWeight: Int!
-    voteWeight: Int!
 }
 
 input ValidatorFilter {
