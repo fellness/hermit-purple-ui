@@ -8,10 +8,16 @@ export type TurnPage = (n: number) => void;
 interface SimplePageProps {
   onPrevPage: TurnPage;
   onNextPage: TurnPage;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
 }
 
-export function SimplePage(props: ButtonGroupProps & SimplePageProps) {
+export function SimplePagination(props: ButtonGroupProps & SimplePageProps) {
   const [pageQuery, setPage] = useQueryParam('page', NumberParam);
+  let { hasNextPage, hasPrevPage } = props;
+
+  hasPrevPage = hasPrevPage ?? true;
+  hasNextPage = hasNextPage ?? true;
 
   const page = pageQuery ?? 1;
 
@@ -28,8 +34,8 @@ export function SimplePage(props: ButtonGroupProps & SimplePageProps) {
 
   return (
     <Button.Group style={{ float: 'right', marginTop: '8px' }} {...props}>
-      <Button icon="left" onClick={onPrevPage} />
-      <Button icon="right" onClick={onNextPage} />
+      <Button icon="left" onClick={onPrevPage} disabled={!hasPrevPage} />
+      <Button icon="right" onClick={onNextPage} disabled={!hasNextPage} />
     </Button.Group>
   );
 }

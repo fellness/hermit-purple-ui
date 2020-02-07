@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Block } from '../generated/types';
 import { BlockHeight } from './BlockHeight';
 import { Timestamp } from './Timestamp';
-import { SimplePage } from './SimplePage';
+import { SimplePagination } from './SimplePage';
 
 type RecentBlock = Pick<Block, 'height' | 'timestamp' | 'transactionsCount'>;
 
@@ -47,7 +47,7 @@ export function BlockList(
         {...props}
       />
       {props.simplePage && (
-        <SimplePage
+        <SimplePagination
           onPrevPage={props.simplePage.onPrevPage}
           onNextPage={props.simplePage.onNextPage}
         />

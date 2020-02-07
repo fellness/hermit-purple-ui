@@ -4,7 +4,7 @@ import { Form, Radio, SubmitButton } from 'formik-antd';
 import { useTranslation } from 'react-i18next';
 import { message } from 'antd';
 import { FormikConfig } from 'formik/dist/types';
-import { useMuta } from '../../hook/chian-sdk';
+import { accountFromPrivateKey, useMuta } from '../../hook/chian-sdk';
 import { defaultService, PayloadType, Service } from './Service/ServiceInput';
 import { ServiceInputField } from './Service/SeriviceInputField';
 
@@ -32,11 +32,9 @@ export function ServiceCaller() {
     });
 
     // Only for testing
-    const signed = muta
-      .accountFromPrivateKey(
-        '0x1000000000000000000000000000000000000000000000000000000000000000',
-      )
-      .signTransaction(tx);
+    const signed = accountFromPrivateKey(
+      '0x1000000000000000000000000000000000000000000000000000000000000000',
+    ).signTransaction(tx);
 
     const txHash = await muta.client.sendTransaction(signed);
     message.success(`write success, hash is ${txHash}`);

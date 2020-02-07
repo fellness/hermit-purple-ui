@@ -13,7 +13,7 @@ import { $ElementType, ValuesType } from 'utility-types';
 import { Link } from 'react-router-dom';
 import { hexToNum } from '../utils';
 import { BlockHeight } from '../container/BlockHeight';
-import { SimplePage } from '../container/SimplePage';
+import { SimplePagination } from '../container/SimplePage';
 
 const TRANSACTION_LIST_QUERY = gql`
   query getTransactionList($perPage: Int, $skip: Int) {
@@ -94,7 +94,7 @@ export const Transactions = () => {
         pagination={false}
         dataSource={transactions ?? []}
       />
-      <SimplePage onPrevPage={onPrevPage} onNextPage={onNextPage} />
+      <SimplePagination onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </>
   );
 };
