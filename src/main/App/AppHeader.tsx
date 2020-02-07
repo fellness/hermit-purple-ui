@@ -25,7 +25,7 @@ const Extra = styled.div`
   line-height: 64px;
 `;
 
-const MenuItem = Menu.Item;
+const { Item: MenuItem } = Menu;
 
 export function AppHeader() {
   const { t } = useTranslation();
@@ -57,6 +57,9 @@ export function AppHeader() {
         </MenuItem>
         <MenuItem key="transactions">
           <Link to="/transactions">{t('Transactions')}</Link>
+        </MenuItem>
+        <MenuItem key="assets">
+          <Link to="/assets">{t('Assets')}</Link>
         </MenuItem>
         <MenuItem key="toolkit">
           <Link to="/toolkit">{t('Toolkit')}</Link>

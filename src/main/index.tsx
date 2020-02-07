@@ -11,6 +11,9 @@ import { TransactionDetail } from './TransactionDetail';
 import { AppHeader } from './App/AppHeader';
 import { useClient } from '../hook/apollo-client';
 import { useStoreActions } from '../store';
+import { Assets } from './Asset/Assets';
+import { AssetDetail } from './Asset/AssetDetail';
+import { AddressDetail } from './AddressDetail';
 
 const Toolkit = lazy(() =>
   import('./Toolkit').then(x => ({ default: x.Toolkit })),
@@ -54,6 +57,16 @@ export function Main() {
                   <Route exact path="/transactions/:id">
                     <TransactionDetail />
                   </Route>
+                  <Route exact path="/assets">
+                    <Assets />
+                  </Route>
+                  <Route exact path="/assets/:id">
+                    <AssetDetail />
+                  </Route>
+                  <Route exact path="/address/:id">
+                    <AddressDetail />
+                  </Route>
+
                   <Route path="/toolkit">
                     <Toolkit />
                   </Route>
