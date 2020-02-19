@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const QUERY_RECENT_INFO = gql`
   query recentBlocks {
-    blocks(orderBy: { height: desc }, first: 11) {
+    blocks(orderBy: { height: desc }, first: 10) {
       height
       transactionsCount
       timestamp

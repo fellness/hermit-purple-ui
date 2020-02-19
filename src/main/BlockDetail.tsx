@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { Timestamp } from '../container/Timestamp';
 import { HexWrapper } from '../container/Hex';
+import { StyledCard } from '../styled/Card';
 
 const DescriptionsWrapper = styled.div`
   .ant-descriptions-bordered .ant-descriptions-item-label {
@@ -19,13 +20,12 @@ const QUERY_BLOCK = gql`
   query block($height: Int) {
     block(where: { height: $height }) {
       height
-      proof {
-        round
-      }
+      proofRound
       stateRoot
       timestamp
       transactionsCount
       validatorVersion
+      proposer
     }
   }
 `;
@@ -50,22 +50,22 @@ export function BlockDetail() {
   const block = data.block;
 
   return (
-    <PageHeader
-      title={`${t('Block')}`}
-      subTitle={block.height}
-      onBack={goBack}
-    >
+    <StyledCard title={`${t('Block')}`}>
       <DescriptionsWrapper>
-        <Descriptions column={1} bordered>
+        <Descriptions column={1} size="small" bordered>
           <Descriptions.Item label={t('Block')}>{id}</Descriptions.Item>
           <Descriptions.Item label={t('Timestamp')}>
             <Timestamp timestamp={block.timestamp} />
           </Descriptions.Item>
-          <Descriptions.Item label={t('Transaction Count')}>
+          <Descriptions.Item label={t('Transactions')}>
             {block.transactionsCount}
           </Descriptions.Item>
+          <Descriptions.Item label={t('Proposer')}>
+            <HexWrapper mode="hex" data={block.proposer} />
+          </Descriptions.Item>
+
           <Descriptions.Item label={t('Round ')}>
-            {block.proof.round}
+            <HexWrapper mode="number" data={block.proofRound} />
           </Descriptions.Item>
           <Descriptions.Item label={t('Validator Version')}>
             <HexWrapper mode="number" data={block.validatorVersion} />
@@ -75,6 +75,6 @@ export function BlockDetail() {
           </Descriptions.Item>
         </Descriptions>
       </DescriptionsWrapper>
-    </PageHeader>
+    </StyledCard>
   );
 }

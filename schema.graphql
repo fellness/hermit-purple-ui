@@ -6,17 +6,18 @@ schema {
 
 type Account {
     address: String!
+    balances(after: Int, before: Int, first: Int, last: Int, orderBy: BalanceOrderByInput, skip: Int, where: BalanceWhereInput): [Balance!]!
     transactions(after: Int, before: Int, first: Int, last: Int, skip: Int): [Transaction!]!
 }
 
 type Asset {
-    account: Account!
+    account: Account
     assetId: String!
     assetTransfers(after: Int, before: Int, first: Int, last: Int, skip: Int): [AssetTransfer!]!
-    creationTransaction: Transaction!
     name: String!
     supply: String!
     symbol: String!
+    transaction: Transaction!
 }
 
 type AssetTransfer {
@@ -26,69 +27,62 @@ type AssetTransfer {
     value: String!
 }
 
+type Balance {
+    account: Account!
+    asset: Asset!
+    balance: String!
+    compound: String!
+}
+
 type Block {
     height: Int!
     orderedTransactionRoot: String!
     preHash: String!
-    proof: Proof!
+    proofBitmap: String!
+    proofBlockHash: String!
+    proofRound: String!
+    proofSignature: String!
+    proposer: String!
     stateRoot: String!
     timestamp: DateTime!
     transactions(after: Int, before: Int, first: Int, last: Int, skip: Int): [Transaction!]!
     transactionsCount: Int!
     validatorVersion: String!
-    validators(after: Int, before: Int, first: Int, last: Int, skip: Int): [Validator!]!
+    validators(after: String, before: String, first: Int, last: Int, skip: Int): [Validator!]!
 }
 
 type Event {
     data: String!
-    receipt: Receipt!
-}
-
-type Proof {
-    bitmap: String!
-    blockHash: String!
-    round: Int!
-    signature: String!
+    service: String!
 }
 
 type Query {
     account(where: AccountWhereUniqueInput!): Account
-    accounts(after: Int, before: Int, first: Int, last: Int, orderBy: AccountOrderByInput, skip: Int, where: AccountWhereInput): [Account!]!
+    accounts(after: String, before: String, first: Int, last: Int, orderBy: AccountOrderByInput, skip: Int, where: AccountWhereInput): [Account!]!
     asset(where: AssetWhereUniqueInput!): Asset
     assetTransfer(where: AssetTransferWhereUniqueInput!): AssetTransfer
     assetTransfers(after: Int, before: Int, first: Int, last: Int, orderBy: AssetTransferOrderByInput, skip: Int, where: AssetTransferWhereInput): [AssetTransfer!]!
-    assets(after: Int, before: Int, first: Int, last: Int, orderBy: AssetOrderByInput, skip: Int, where: AssetWhereInput): [Asset!]!
+    assets(after: String, before: String, first: Int, last: Int, orderBy: AssetOrderByInput, skip: Int, where: AssetWhereInput): [Asset!]!
     block(where: BlockWhereUniqueInput!): Block
     blocks(after: Int, before: Int, first: Int, last: Int, orderBy: BlockOrderByInput, skip: Int, where: BlockWhereInput): [Block!]!
-    receipt(where: ReceiptWhereUniqueInput!): Receipt
-    receipts(after: Int, before: Int, first: Int, last: Int, orderBy: ReceiptOrderByInput, skip: Int, where: ReceiptWhereInput): [Receipt!]!
     transaction(where: TransactionWhereUniqueInput!): Transaction
     transactions(after: Int, before: Int, first: Int, last: Int, orderBy: TransactionOrderByInput, skip: Int, where: TransactionWhereInput): [Transaction!]!
     validator(where: ValidatorWhereUniqueInput!): Validator
 }
 
-type Receipt {
-    cyclesUsed: String!
-    events(after: Int, before: Int, first: Int, last: Int, skip: Int): [Event!]!
-    response: ReceiptResponse!
-    transaction: Transaction!
-}
-
-type ReceiptResponse {
-    isError: Boolean!
-    ret: String!
-}
-
 type Transaction {
-    account: Account!
     block: Block!
     cyclesLimit: String!
     cyclesPrice: String!
+    cyclesUsed: String
+    from: Account!
     method: String!
     nonce: String!
+    order: Int!
     payload: String!
     pubkey: String!
-    receipt: Receipt
+    receiptIsError: Boolean
+    receiptRet: String
     serviceName: String!
     signature: String!
     txHash: String!
@@ -108,7 +102,6 @@ enum OrderByArg {
 
 input AccountOrderByInput {
     address: OrderByArg
-    id: OrderByArg
 }
 
 input AccountWhereInput {
@@ -117,7 +110,7 @@ input AccountWhereInput {
     OR: [AccountWhereInput!]
     address: StringFilter
     assets: AssetFilter
-    id: IntFilter
+    balances: BalanceFilter
     transactions: TransactionFilter
     transferFrom: AssetTransferFilter
     transferTo: AssetTransferFilter
@@ -125,7 +118,6 @@ input AccountWhereInput {
 
 input AccountWhereUniqueInput {
     address: String
-    id: Int
 }
 
 input AssetFilter {
@@ -136,7 +128,6 @@ input AssetFilter {
 
 input AssetOrderByInput {
     assetId: OrderByArg
-    id: OrderByArg
     name: OrderByArg
     supply: OrderByArg
     symbol: OrderByArg
@@ -176,16 +167,38 @@ input AssetWhereInput {
     account: AccountWhereInput
     assetId: StringFilter
     assetTransfers: AssetTransferFilter
-    creationTransaction: TransactionWhereInput
-    id: IntFilter
+    balances: BalanceFilter
     name: StringFilter
     supply: StringFilter
     symbol: StringFilter
+    transaction: TransactionWhereInput
 }
 
 input AssetWhereUniqueInput {
     assetId: String
-    id: Int
+}
+
+input BalanceFilter {
+    every: BalanceWhereInput
+    none: BalanceWhereInput
+    some: BalanceWhereInput
+}
+
+input BalanceOrderByInput {
+    balance: OrderByArg
+    compound: OrderByArg
+    id: OrderByArg
+}
+
+input BalanceWhereInput {
+    AND: [BalanceWhereInput!]
+    NOT: [BalanceWhereInput!]
+    OR: [BalanceWhereInput!]
+    account: AccountWhereInput
+    asset: AssetWhereInput
+    balance: StringFilter
+    compound: StringFilter
+    id: IntFilter
 }
 
 input BlockFilter {
@@ -195,10 +208,14 @@ input BlockFilter {
 }
 
 input BlockOrderByInput {
+    execHeight: OrderByArg
     height: OrderByArg
-    id: OrderByArg
     orderRoot: OrderByArg
     preHash: OrderByArg
+    proofBitmap: OrderByArg
+    proofBlockHash: OrderByArg
+    proofRound: OrderByArg
+    proofSignature: OrderByArg
     proposer: OrderByArg
     stateRoot: OrderByArg
     timestamp: OrderByArg
@@ -210,11 +227,14 @@ input BlockWhereInput {
     AND: [BlockWhereInput!]
     NOT: [BlockWhereInput!]
     OR: [BlockWhereInput!]
+    execHeight: IntFilter
     height: IntFilter
-    id: IntFilter
     orderRoot: StringFilter
     preHash: StringFilter
-    proof: ProofWhereInput
+    proofBitmap: StringFilter
+    proofBlockHash: StringFilter
+    proofRound: StringFilter
+    proofSignature: StringFilter
     proposer: StringFilter
     stateRoot: StringFilter
     timestamp: DateTimeFilter
@@ -226,12 +246,6 @@ input BlockWhereInput {
 
 input BlockWhereUniqueInput {
     height: Int
-    id: Int
-}
-
-input BooleanFilter {
-    equals: Boolean
-    not: Boolean
 }
 
 input DateTimeFilter {
@@ -257,7 +271,7 @@ input EventWhereInput {
     OR: [EventWhereInput!]
     data: StringFilter
     id: IntFilter
-    receipt: ReceiptWhereInput
+    receipt: TransactionWhereInput
     service: StringFilter
 }
 
@@ -272,47 +286,23 @@ input IntFilter {
     notIn: [Int!]
 }
 
-input ProofWhereInput {
-    AND: [ProofWhereInput!]
-    NOT: [ProofWhereInput!]
-    OR: [ProofWhereInput!]
-    bitmap: StringFilter
-    blockHash: StringFilter
-    blocks: BlockFilter
-    height: IntFilter
-    id: IntFilter
-    round: IntFilter
-    signature: StringFilter
+input NullableBooleanFilter {
+    equals: Boolean
+    not: Boolean
 }
 
-input ReceiptOrderByInput {
-    cyclesUsed: OrderByArg
-    id: OrderByArg
-}
-
-input ReceiptResponseWhereInput {
-    AND: [ReceiptResponseWhereInput!]
-    NOT: [ReceiptResponseWhereInput!]
-    OR: [ReceiptResponseWhereInput!]
-    id: IntFilter
-    isError: BooleanFilter
-    receipt: ReceiptWhereInput
-    ret: StringFilter
-}
-
-input ReceiptWhereInput {
-    AND: [ReceiptWhereInput!]
-    NOT: [ReceiptWhereInput!]
-    OR: [ReceiptWhereInput!]
-    cyclesUsed: StringFilter
-    events: EventFilter
-    id: IntFilter
-    response: ReceiptResponseWhereInput
-    transaction: TransactionWhereInput
-}
-
-input ReceiptWhereUniqueInput {
-    id: Int
+input NullableStringFilter {
+    contains: String
+    endsWith: String
+    equals: String
+    gt: String
+    gte: String
+    in: [String!]
+    lt: String
+    lte: String
+    not: String
+    notIn: [String!]
+    startsWith: String
 }
 
 input StringFilter {
@@ -339,11 +329,14 @@ input TransactionOrderByInput {
     chainId: OrderByArg
     cyclesLimit: OrderByArg
     cyclesPrice: OrderByArg
-    id: OrderByArg
+    cyclesUsed: OrderByArg
     method: OrderByArg
     nonce: OrderByArg
+    order: OrderByArg
     payload: OrderByArg
     pubkey: OrderByArg
+    receiptIsError: OrderByArg
+    receiptRet: OrderByArg
     serviceName: OrderByArg
     signature: OrderByArg
     timeout: OrderByArg
@@ -354,18 +347,21 @@ input TransactionWhereInput {
     AND: [TransactionWhereInput!]
     NOT: [TransactionWhereInput!]
     OR: [TransactionWhereInput!]
-    account: AccountWhereInput
     block: BlockWhereInput
     chainId: StringFilter
     createdAsset: AssetWhereInput
     cyclesLimit: StringFilter
     cyclesPrice: StringFilter
-    id: IntFilter
+    cyclesUsed: NullableStringFilter
+    events: EventFilter
+    from: AccountWhereInput
     method: StringFilter
     nonce: StringFilter
+    order: IntFilter
     payload: StringFilter
     pubkey: StringFilter
-    receipt: ReceiptWhereInput
+    receiptIsError: NullableBooleanFilter
+    receiptRet: NullableStringFilter
     serviceName: StringFilter
     signature: StringFilter
     timeout: StringFilter
@@ -374,7 +370,7 @@ input TransactionWhereInput {
 }
 
 input TransactionWhereUniqueInput {
-    id: Int
+    order: Int
     txHash: String
 }
 
@@ -390,14 +386,12 @@ input ValidatorWhereInput {
     OR: [ValidatorWhereInput!]
     address: StringFilter
     blocks: BlockFilter
-    id: IntFilter
     proposeWeight: IntFilter
     voteWeight: IntFilter
 }
 
 input ValidatorWhereUniqueInput {
     address: String
-    id: Int
 }
 
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Table } from 'antd';
 import { ColumnProps, TableProps } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 import { Block } from '../generated/types';
 import { BlockHeight } from './BlockHeight';
 import { Timestamp } from './Timestamp';
 import { SimplePagination } from './SimplePage';
+import { StyledTable } from '../styled/Table';
 
 type RecentBlock = Pick<Block, 'height' | 'timestamp' | 'transactionsCount'>;
 
@@ -40,7 +40,7 @@ export function BlockList(
 
   return (
     <>
-      <Table
+      <StyledTable
         rowKey={x => x.height.toString()}
         pagination={false}
         columns={columns}
