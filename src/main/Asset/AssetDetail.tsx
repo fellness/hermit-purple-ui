@@ -10,6 +10,7 @@ import { Address } from '../../container/Address';
 import { HexWrapper } from '../../container/Hex';
 import { SimplePagination } from '../../container/SimplePage';
 import { usePageQuery } from '../../hook/use-page-query';
+import { StyledTable } from "../../styled/Table";
 
 const QUERY_ASSET = gql`
   query asset($assetId: String!, $perPage: Int = 10, $skip: Int = 0) {
@@ -87,7 +88,7 @@ export function AssetDetail() {
 
   return (
     <PageHeader title={t('Asset')} subTitle={assetName}>
-      <Table
+      <StyledTable
         loading={loading}
         dataSource={assetTransfers}
         columns={columns}

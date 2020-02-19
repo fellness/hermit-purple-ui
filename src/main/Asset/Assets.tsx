@@ -12,6 +12,7 @@ import {
 import { SimplePagination } from '../../container/SimplePage';
 import { HexWrapper } from '../../container/Hex';
 import { usePageQuery } from '../../hook/use-page-query';
+import { StyledTable } from "../../styled/Table";
 
 const ASSET_LIST_QUERY = gql`
   query getAssetList($perPage: Int, $skip: Int) {
@@ -67,7 +68,7 @@ export const Assets = () => {
 
   return (
     <>
-      <Table
+      <StyledTable
         loading={loading}
         columns={columns}
         pagination={false}

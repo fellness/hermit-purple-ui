@@ -10,13 +10,13 @@ import { useToggle } from 'react-use';
 const Logo = styled(Link)`
   float: left;
   cursor: pointer;
-  line-height: 64px;
+  height: 64px;
   display: inline-block;
   font-size: 18px;
   padding-right: 24px;
 
   img {
-    height: 64px;
+    height: 63px;
   }
 `;
 
@@ -43,13 +43,14 @@ export function AppHeader() {
         <Button
           icon="setting"
           type="link"
+          style={{ color: '#fff' }}
           onClick={() => toggleOpening(true)}
         />
       </Extra>
       <Menu
         mode="horizontal"
         theme="dark"
-        style={{ lineHeight: '64px' }}
+        style={{ lineHeight: '64px', backgroundColor: '#1c2945' }}
         selectedKeys={[type]}
       >
         <MenuItem key="blocks">

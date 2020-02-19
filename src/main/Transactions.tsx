@@ -14,10 +14,11 @@ import { Link } from 'react-router-dom';
 import { hexToNum } from '../utils';
 import { BlockHeight } from '../container/BlockHeight';
 import { SimplePagination } from '../container/SimplePage';
+import { StyledTable } from '../styled/Table';
 
 const TRANSACTION_LIST_QUERY = gql`
   query getTransactionList($perPage: Int, $skip: Int) {
-    transactions(first: $perPage, skip: $skip, orderBy: { id: desc }) {
+    transactions(last: $perPage, skip: $skip) {
       txHash
       cyclesPrice
       cyclesLimit
@@ -87,7 +88,7 @@ export const Transactions = () => {
 
   return (
     <>
-      <Table
+      <StyledTable
         rowKey={row => row.txHash}
         loading={loading}
         columns={columns}

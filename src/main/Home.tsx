@@ -9,10 +9,14 @@ import { GlobalSearch } from './Home/GlobalSearch';
 export function Home() {
   return (
     <>
-      <GlobalSearch />
-      <StatisticInfo />
-      <div style={{ padding: '32px 0' }}>
-        <Row gutter={24}>
+      <div style={{ marginBottom: '20px' }}>
+        <GlobalSearch />
+      </div>
+      <div style={{ marginBottom: '24px' }}>
+        <StatisticInfo />
+      </div>
+      <div>
+        <Row gutter={20}>
           <Col span={12}>
             <RecentBlock />
           </Col>

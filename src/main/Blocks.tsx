@@ -6,7 +6,7 @@ import { BlocksListQuery, BlocksListQueryVariables } from '../generated/types';
 import { BlockList } from '../container/BlockList';
 
 export const BLOCK_LIST_QUERY = gql`
-  query blocksList($skip: Int, $perPage: Int) {
+  query blocksList($skip: Int, $perPage: Int = 10) {
     blocks(orderBy: { height: desc }, skip: $skip, first: $perPage) {
       height
       timestamp
@@ -22,7 +22,7 @@ export function Blocks() {
   const { data, loading } = useQuery<BlocksListQuery, BlocksListQueryVariables>(
     BLOCK_LIST_QUERY,
     {
-      variables: { perPage: 10, skip: page * 10 },
+      variables: { perPage: 10, skip: (page - 1) * 10 },
     },
   );
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Input } from 'antd';
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 export function GlobalSearch() {
   const { push } = useHistory();
+  const { t } = useTranslation();
 
   function handleOnSearch(input: string) {
     if (/^(0x)?[abcdef0-9]{64}$/i.test(input)) {
@@ -14,12 +16,11 @@ export function GlobalSearch() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Input.Search
-        size="large"
-        placeholder="block / transaction"
-        onSearch={handleOnSearch}
-      />
-    </div>
+    <Input.Search
+      size="large"
+      enterButton={t('Search')}
+      placeholder={t('Block / Transaction')}
+      onSearch={handleOnSearch}
+    />
   );
 }

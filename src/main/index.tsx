@@ -35,10 +35,10 @@ export function Main() {
     <ApolloProvider client={client}>
       <Layout>
         <Router>
-          <Header>
+          <Header style={{ backgroundColor: '#1c2945' }}>
             <AppHeader />
           </Header>
-          <Content style={{ padding: '16px 50px' }}>
+          <Content style={{ padding: '20px 50px' }}>
             <QueryParamProvider ReactRouterRoute={Route}>
               <Suspense fallback={<Spin />}>
                 <Switch>

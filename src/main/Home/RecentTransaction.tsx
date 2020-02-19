@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { ColumnProps } from 'antd/es/table';
 import gql from 'graphql-tag';
@@ -9,10 +8,11 @@ import { hexToNum } from '../../utils';
 import { Link } from 'react-router-dom';
 import { $ElementType, ValuesType } from 'utility-types';
 import { BlockHeight } from '../../container/BlockHeight';
+import { StyledTable } from '../../styled/Table';
 
 const QUERY_RECENT_TRANSACTION = gql`
   query recentTransactions {
-    transactions(orderBy: { id: desc }, first: 11) {
+    transactions(last: 10) {
       cyclesPrice
       txHash
       serviceName
@@ -58,7 +58,7 @@ export function RecentTransaction() {
   const dataSource = data?.transactions ?? [];
 
   return (
-    <Table
+    <StyledTable
       size="small"
       loading={loading}
       columns={columns}

@@ -32,26 +32,27 @@ export function StatisticInfo(props: StatisticInfoProps) {
   const { height, validators, timestamp: after } = data.blocks[0];
   const before = data.blocks[1].timestamp;
 
+  const cardStyle = {
+    borderRadius: '4px',
+    border: 'solid 1px #cfd8df',
+  };
+
   const timeUsage = +new Date(after) - +new Date(before);
   return (
     <Row gutter={32}>
       <Col span={8}>
-        <Card>
-          <Statistic title={t('Block Height')} value={height} />
+        <Card size="small" title={t('Block Height')} style={cardStyle}>
+          <Statistic value={height} />
         </Card>
       </Col>
       <Col span={8}>
-        <Card>
-          <Statistic
-            title={t('Block Interval')}
-            value={(timeUsage / 1000).toFixed(2)}
-            suffix="s"
-          />
+        <Card size="small" title={t('Block Interval')} style={cardStyle}>
+          <Statistic value={(timeUsage / 1000).toFixed(2)} suffix="s" />
         </Card>
       </Col>
       <Col span={8}>
-        <Card>
-          <Statistic title={t('Block Validators')} value={validators.length} />
+        <Card size="small" title={t('Block Validators')} style={cardStyle}>
+          <Statistic value={validators.length} />
         </Card>
       </Col>
     </Row>
